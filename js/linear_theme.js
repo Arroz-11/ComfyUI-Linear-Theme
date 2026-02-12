@@ -2319,12 +2319,12 @@ button.comfyui-button.primary:hover,
 .actionbar .p-inputnumber .p-inputnumber-input {
     background: #0a0a0a !important;
     border: 1px solid #222226 !important;
-    border-radius: 6px !important;
+    border-radius: 4px 0 0 4px !important;
     color: #a1a1aa !important;
-    font-size: 13px !important;
+    font-size: 12px !important;
     font-variant-numeric: tabular-nums !important;
-    height: 32px !important;
-    width: 40px !important;
+    height: 30px !important;
+    width: 32px !important;
     text-align: center !important;
     padding: 0 !important;
 }
@@ -2338,8 +2338,21 @@ button.comfyui-button.primary:hover,
     background: #0a0a0a !important;
     border: 1px solid #222226 !important;
     color: #52525b !important;
-    width: 20px !important;
+    width: 16px !important;
+    height: 15px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     transition: color 150ms ease, border-color 150ms ease !important;
+}
+
+.actionbar .p-inputnumber-button .p-icon,
+.actionbar .p-inputnumber-button svg,
+.actionbar .p-inputnumber-button i {
+    width: 10px !important;
+    height: 10px !important;
+    font-size: 10px !important;
 }
 
 .actionbar .p-inputnumber-button:hover {
@@ -2349,11 +2362,12 @@ button.comfyui-button.primary:hover,
 }
 
 .actionbar .p-inputnumber-button-up {
-    border-radius: 0 6px 0 0 !important;
+    border-radius: 0 4px 0 0 !important;
+    border-bottom: none !important;
 }
 
 .actionbar .p-inputnumber-button-down {
-    border-radius: 0 0 6px 0 !important;
+    border-radius: 0 0 4px 0 !important;
 }
 
 /* ── Queue status text ("0 active") ── */
