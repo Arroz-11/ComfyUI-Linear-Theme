@@ -26,8 +26,6 @@ const THEME = {
     WIDGET_SECONDARY_TEXT_COLOR: "#a1a1aa",
     LINK_COLOR: "#52525b",
     EVENT_LINK_COLOR: "#a8a29e",
-    CONNECTING_LINK_COLOR: "#f4f4f5",
-
     SLOT_COLORS: {
         CLIP: "#FACC15",
         CLIP_VISION: "#67E8F9",
@@ -3089,10 +3087,44 @@ comfyApp.registerExtension({
             }
         }
 
+        // Apply theme properties to LiteGraph statics (CONNECTING_LINK_COLOR, LINK_COLOR, etc.)
+        if (window.LiteGraph) {
+            for (const [key, value] of Object.entries(THEME)) {
+                if (key === "SLOT_COLORS") continue;
+                if (typeof value === "string" && LiteGraph[key] !== undefined) {
+                    LiteGraph[key] = value;
+                }
+            }
+        }
+
         // Apply slot colors
         if (window.LiteGraph) {
             for (const [type, color] of Object.entries(THEME.SLOT_COLORS)) {
                 LiteGraph.registerNodeSlotColor?.(type, color);
+            }
+        }
+
+        // Fix connection link colors — fill empty byType entries and update defaults
+        if (canvas) {
+            // Default connection colors (fallback when type has no color)
+            canvas.default_connection_color = {
+                input_off: "#3f3f46",
+                input_on: "#a1a1aa",
+                output_off: "#3f3f46",
+                output_on: "#a1a1aa"
+            };
+
+            // Fill empty byType colors so dragging links match connected links
+            const byType = canvas.default_connection_color_byType;
+            if (byType) {
+                for (const [type, color] of Object.entries(THEME.SLOT_COLORS)) {
+                    byType[type] = color;
+                }
+                // Common types that ComfyUI leaves empty
+                if (!byType["STRING"]) byType["STRING"] = "#a1a1aa";
+                if (!byType["FLOAT"]) byType["FLOAT"] = "#71717a";
+                if (!byType["COMBO"]) byType["COMBO"] = "#71717a";
+                if (!byType["BOOLEAN"]) byType["BOOLEAN"] = "#71717a";
             }
         }
 
