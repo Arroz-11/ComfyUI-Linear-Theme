@@ -1545,6 +1545,832 @@ table td {
     background: rgba(244,244,245,0.1) !important;
     color: var(--linear-text-primary) !important;
 }
+
+/* ============================================
+   ComfyUI Manager — Custom Nodes List
+   ============================================ */
+
+/* ── Main container ── */
+.cn-manager {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    color: #f4f4f5 !important;
+    --grid-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+/* ── Header / filter bar ── */
+.cn-manager-header {
+    gap: 8px !important;
+}
+
+.cn-manager-filter {
+    background: #0a0a0a !important;
+    border: 1px solid #222226 !important;
+    border-radius: 6px !important;
+    color: #a1a1aa !important;
+    font-size: 13px !important;
+    transition: border-color 150ms ease !important;
+}
+
+.cn-manager-filter:hover {
+    border-color: #2a2a2e !important;
+    filter: none !important;
+}
+
+.cn-manager-filter:focus {
+    border-color: #818cf8 !important;
+    outline: none !important;
+}
+
+.cn-manager-keywords {
+    background-color: #0a0a0a !important;
+    border: 1px solid #222226 !important;
+    border-radius: 6px !important;
+    color: #f4f4f5 !important;
+    font-size: 13px !important;
+    transition: border-color 150ms ease !important;
+}
+
+.cn-manager-keywords:hover {
+    border-color: #2a2a2e !important;
+}
+
+.cn-manager-keywords:focus {
+    border-color: #818cf8 !important;
+    outline: none !important;
+}
+
+.cn-manager-status {
+    color: #71717a !important;
+    font-size: 13px !important;
+}
+
+/* ── Grid container ── */
+.cn-manager-grid {
+    border: 1px solid #1e1e22 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+/* ── TurboGrid base ── */
+.cn-manager-grid .tg-turbogrid {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    font-size: 13px !important;
+    background: #0a0a0a !important;
+    color: #f4f4f5 !important;
+}
+
+/* ── Header cells ── */
+.cn-manager-grid .tg-header-item {
+    background: #0a0a0a !important;
+    border-bottom: 1px solid #1e1e22 !important;
+    border-right: none !important;
+    color: #71717a !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+.cn-manager-grid .tg-column-name {
+    color: #71717a !important;
+}
+
+/* ── Sort indicators ── */
+.cn-manager-grid .tg-sort-indicator-icon {
+    color: #a1a1aa !important;
+}
+
+/* ── Body rows ── */
+.cn-manager-grid .tg-body {
+    background: #0a0a0a !important;
+}
+
+.cn-manager-grid .tg-row {
+    border-bottom: 1px solid rgba(30,30,34,0.5) !important;
+    transition: background 150ms ease !important;
+}
+
+.cn-manager-grid .tg-even {
+    background: #0a0a0a !important;
+}
+
+.cn-manager-grid .tg-odd {
+    background: rgba(14,14,16,0.8) !important;
+}
+
+.cn-manager-grid .tg-hover {
+    background: rgba(244,244,245,0.03) !important;
+}
+
+/* ── Cells ── */
+.cn-manager-grid .tg-cell {
+    border-right: none !important;
+    color: #a1a1aa !important;
+    padding: 8px 12px !important;
+}
+
+/* ── Row number (ID) ── */
+.cn-manager-grid .tg-cell-row-number {
+    color: #3f3f46 !important;
+    font-size: 12px !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+/* ── Frozen column separator ── */
+.cn-manager-grid .tg-frozen-line-v {
+    border-right: 1px solid #1e1e22 !important;
+}
+
+/* ── Column separators ── */
+.cn-manager-grid .tg-column-line {
+    border-right: none !important;
+}
+
+/* ── Title / pack name links ── */
+.cn-manager-grid .cn-pack-name a {
+    color: #f4f4f5 !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    transition: color 150ms ease !important;
+}
+
+.cn-manager-grid .cn-pack-name a:hover {
+    color: #ffffff !important;
+    text-decoration: none !important;
+}
+
+/* ── Description links ── */
+.cn-manager-grid .cn-pack-desc a {
+    color: #818cf8 !important;
+    font-weight: 500 !important;
+}
+
+/* ── Version ── */
+.cn-manager-grid .cn-pack-version {
+    color: #71717a !important;
+    font-variant-numeric: tabular-nums !important;
+    font-size: 12px !important;
+}
+
+/* ── Nodes count ── */
+.cn-manager-grid .cn-pack-nodes {
+    color: #71717a !important;
+    font-size: 12px !important;
+}
+
+/* ── Conflicts ── */
+.cn-manager-grid .cn-pack-conflicts {
+    color: #f59e0b !important;
+    font-size: 11px !important;
+}
+
+/* ── Author ── */
+.cn-manager-grid .cn-pack-author {
+    color: #a1a1aa !important;
+}
+
+/* ── Stars ── */
+.cn-manager-grid .cn-pack-stars {
+    color: #52525b !important;
+    font-variant-numeric: tabular-nums !important;
+    font-size: 12px !important;
+}
+
+/* ── Last update ── */
+.cn-manager-grid .cn-pack-last-update {
+    color: #52525b !important;
+    font-size: 12px !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+/* ── Badges ── */
+.cn-manager-grid .cn-pack-badge {
+    background: rgba(244,244,245,0.05) !important;
+    border: 1px solid #222226 !important;
+    color: #71717a !important;
+    font-size: 11px !important;
+    border-radius: 4px !important;
+}
+
+/* ── Checkboxes ── */
+.cn-manager-grid .tg-checkbox {
+    border: 1px solid #222226 !important;
+    border-radius: 4px !important;
+    background: transparent !important;
+    transition: border-color 150ms ease !important;
+}
+
+.cn-manager-grid .tg-checkbox-selected {
+    background: #f4f4f5 !important;
+    border-color: #f4f4f5 !important;
+}
+
+.cn-manager-grid .tg-checkbox-item {
+    color: #09090b !important;
+}
+
+/* ── Highlight ── */
+.cn-manager-grid .tg-turbogrid .tg-highlight::after {
+    background-color: rgba(244,244,245,0.03) !important;
+}
+
+/* ── Scrollbar ── */
+.cn-manager-grid .tg-scrollbar-thumb {
+    background: #222226 !important;
+    border-radius: 3px !important;
+}
+
+.cn-manager-grid .tg-scrollbar-thumb:hover,
+.cn-manager-grid .tg-scrollbar-thumb-hold {
+    background: #3f3f46 !important;
+}
+
+.cn-manager-grid .tg-scrollbar-track {
+    background: transparent !important;
+}
+
+/* ── Row not found ── */
+.cn-manager-grid .tg-row-not-found {
+    color: #52525b !important;
+}
+
+/* ============================================
+   Manager — Action Buttons (in-row)
+   ============================================ */
+
+.cn-manager .cn-install-buttons button {
+    background: #0a0a0a !important;
+    border: 1px solid #222226 !important;
+    border-radius: 6px !important;
+    color: #a1a1aa !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    padding: 4px 10px !important;
+    min-width: 80px !important;
+    transition: border-color 150ms ease, color 150ms ease !important;
+    filter: none !important;
+}
+
+.cn-manager .cn-install-buttons button:hover {
+    border-color: #2a2a2e !important;
+    color: #f4f4f5 !important;
+    background: rgba(244,244,245,0.04) !important;
+    filter: none !important;
+}
+
+/* Override all colored button states to ghost */
+.cn-manager .cn-btn-install,
+.cn-manager .cn-btn-try-install,
+.cn-manager .cn-btn-update,
+.cn-manager .cn-btn-try-update,
+.cn-manager .cn-btn-enable,
+.cn-manager .cn-btn-disable,
+.cn-manager .cn-btn-switch,
+.cn-manager .cn-btn-try-fix,
+.cn-manager .cn-btn-reinstall {
+    background: #0a0a0a !important;
+    color: #a1a1aa !important;
+}
+
+.cn-manager .cn-btn-install:hover,
+.cn-manager .cn-btn-try-install:hover,
+.cn-manager .cn-btn-update:hover,
+.cn-manager .cn-btn-try-update:hover,
+.cn-manager .cn-btn-enable:hover,
+.cn-manager .cn-btn-disable:hover,
+.cn-manager .cn-btn-switch:hover,
+.cn-manager .cn-btn-try-fix:hover,
+.cn-manager .cn-btn-reinstall:hover {
+    color: #f4f4f5 !important;
+}
+
+/* Uninstall — subtle danger */
+.cn-manager .cn-btn-uninstall {
+    background: #0a0a0a !important;
+    border-color: rgba(239,68,68,0.3) !important;
+    color: #71717a !important;
+}
+
+.cn-manager .cn-btn-uninstall:hover {
+    border-color: #ef4444 !important;
+    color: #ef4444 !important;
+    background: rgba(239,68,68,0.05) !important;
+}
+
+/* Loading state */
+.cn-manager button.cn-btn-loading {
+    border-color: rgba(129,140,248,0.4) !important;
+    background: #0a0a0a !important;
+}
+
+.cn-manager button.cn-btn-loading::after {
+    background-image: repeating-linear-gradient(
+        -45deg,
+        rgba(129,140,248,0.15),
+        rgba(129,140,248,0.15) 10px,
+        transparent 10px,
+        transparent 15px
+    ) !important;
+}
+
+/* Import failed */
+.cn-manager .cn-btn-import-failed {
+    background: #0a0a0a !important;
+    border-color: rgba(239,68,68,0.3) !important;
+    color: #ef4444 !important;
+    font-size: 10px !important;
+}
+
+/* ============================================
+   Manager — Footer Buttons
+   ============================================ */
+
+.cn-manager-footer {
+    gap: 8px !important;
+}
+
+.cn-manager-footer button {
+    background: #0a0a0a !important;
+    border: 1px solid #222226 !important;
+    border-radius: 6px !important;
+    color: #71717a !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    padding: 6px 14px !important;
+    transition: border-color 150ms ease, color 150ms ease !important;
+    filter: none !important;
+}
+
+.cn-manager-footer button:hover {
+    border-color: #2a2a2e !important;
+    color: #f4f4f5 !important;
+    background: rgba(244,244,245,0.04) !important;
+    filter: none !important;
+}
+
+/* Restart button — subtle danger */
+.cn-manager .cn-manager-restart {
+    border-color: rgba(239,68,68,0.3) !important;
+    color: #ef4444 !important;
+    background: #0a0a0a !important;
+}
+
+.cn-manager .cn-manager-restart:hover {
+    border-color: #ef4444 !important;
+    background: rgba(239,68,68,0.05) !important;
+}
+
+/* ============================================
+   Manager — Selection Area
+   ============================================ */
+
+.cn-manager-selection {
+    gap: 8px !important;
+}
+
+.cn-selected-buttons button {
+    font-size: 12px !important;
+}
+
+/* ============================================
+   Manager — Flyover / Side Panel
+   ============================================ */
+
+.cn-flyover {
+    background-color: #0a0a0a !important;
+    border-left: 1px solid #1e1e22 !important;
+}
+
+.cn-flyover::before {
+    background-image: none !important;
+}
+
+.cn-flyover-header {
+    border-bottom: 1px solid #1e1e22 !important;
+    color: #f4f4f5 !important;
+}
+
+.cn-flyover-title {
+    color: #f4f4f5 !important;
+    font-size: 14px !important;
+}
+
+.cn-flyover-close {
+    color: #71717a !important;
+    transition: color 150ms ease !important;
+}
+
+.cn-flyover-close:hover {
+    color: #f4f4f5 !important;
+}
+
+.cn-flyover-body {
+    background-color: #0a0a0a !important;
+}
+
+/* Flyover node rows */
+.cn-nodes-row {
+    border-bottom: 1px solid rgba(30,30,34,0.5) !important;
+}
+
+.cn-nodes-row:nth-child(odd) {
+    background-color: rgba(14,14,16,0.5) !important;
+}
+
+.cn-nodes-row:hover {
+    background-color: rgba(244,244,245,0.03) !important;
+}
+
+.cn-nodes-sn {
+    color: #3f3f46 !important;
+}
+
+.cn-nodes-name {
+    color: #f4f4f5 !important;
+}
+
+.cn-nodes-pack {
+    color: #818cf8 !important;
+}
+
+.cn-nodes-conflict .cn-nodes-name,
+.cn-nodes-conflict .cn-icon {
+    color: #f59e0b !important;
+}
+
+/* Node preview popover */
+.cn-popover {
+    background: #0a0a0a !important;
+    border: 1px solid #1e1e22 !important;
+    border-radius: 8px !important;
+    filter: none !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5) !important;
+}
+
+.cn-preview {
+    color: #f4f4f5 !important;
+}
+
+.cn-preview-header {
+    border-bottom: 1px solid #1e1e22 !important;
+}
+
+.cn-preview-name {
+    color: #f4f4f5 !important;
+}
+
+.cn-preview-value {
+    color: #71717a !important;
+}
+
+.cn-preview-string {
+    background: #18181b !important;
+    color: #a1a1aa !important;
+}
+
+.cn-preview-switch {
+    background: #18181b !important;
+    border: 1px solid #222226 !important;
+    border-radius: 6px !important;
+}
+
+.cn-preview-description {
+    background: #18181b !important;
+    color: #71717a !important;
+    border-radius: 6px !important;
+}
+
+.cn-tag-list > div {
+    background-color: rgba(244,244,245,0.05) !important;
+    border-radius: 4px !important;
+    color: #71717a !important;
+}
+
+/* ============================================
+   Manager — Version Selector Dialog
+   ============================================ */
+
+/* Target the ComfyDialog that contains version selector (z-index 1100) */
+.comfy-modal[style*="1100"],
+.comfy-modal[style*="z-index"] {
+    background: #0a0a0a !important;
+    border: 1px solid #1e1e22 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5) !important;
+    color: #f4f4f5 !important;
+    overflow: hidden !important;
+}
+
+.comfy-modal[style*="1100"] select,
+.comfy-modal select {
+    background: #18181b !important;
+    border: 1px solid #222226 !important;
+    border-radius: 6px !important;
+    color: #f4f4f5 !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    font-size: 13px !important;
+    padding: 6px 8px !important;
+    transition: border-color 150ms ease !important;
+}
+
+.comfy-modal[style*="1100"] select:focus,
+.comfy-modal select:focus {
+    border-color: #818cf8 !important;
+    outline: none !important;
+}
+
+.comfy-modal[style*="1100"] select option,
+.comfy-modal select option {
+    background: #18181b !important;
+    color: #f4f4f5 !important;
+    padding: 6px 8px !important;
+}
+
+.comfy-modal[style*="1100"] select option:hover,
+.comfy-modal select option:hover,
+.comfy-modal select option:checked {
+    background: rgba(244,244,245,0.08) !important;
+}
+
+.comfy-modal[style*="1100"] button,
+.comfy-modal button {
+    background: #0a0a0a !important;
+    border: 1px solid #222226 !important;
+    border-radius: 6px !important;
+    color: #a1a1aa !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    transition: border-color 150ms ease, color 150ms ease !important;
+}
+
+.comfy-modal[style*="1100"] button:hover,
+.comfy-modal button:hover {
+    border-color: #2a2a2e !important;
+    color: #f4f4f5 !important;
+    background: rgba(244,244,245,0.04) !important;
+}
+
+/* ============================================
+   Manager — Disabled states
+   ============================================ */
+
+.cn-manager button:disabled,
+.cn-manager input:disabled,
+.cn-manager select:disabled {
+    color: #3f3f46 !important;
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}
+
+/* ============================================
+   Manager — General button override
+   ============================================ */
+
+.cn-manager button {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    filter: none !important;
+}
+
+.cn-manager button:hover {
+    filter: none !important;
+}
+
+/* ============================================
+   Manager — Main Settings Panel
+   ============================================ */
+
+/* Dialog container */
+#cm-manager-dialog {
+    background: #0a0a0a !important;
+    border: 1px solid #1e1e22 !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    color: #f4f4f5 !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+/* Three-column layout */
+.cm-menu-container {
+    gap: 16px !important;
+    padding: 20px !important;
+}
+
+.cm-menu-column {
+    gap: 8px !important;
+}
+
+/* Labels next to dropdowns */
+#cm-manager-dialog label,
+#cm-manager-dialog td {
+    color: #71717a !important;
+    font-size: 13px !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+/* Dropdown selects (Channel, Preview method, Share, Component) */
+.cm-menu-combo,
+#cm-manager-dialog select {
+    background: #18181b !important;
+    border: 1px solid #222226 !important;
+    border-radius: 6px !important;
+    color: #a1a1aa !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    font-size: 13px !important;
+    padding: 6px 10px !important;
+    cursor: pointer !important;
+    transition: border-color 150ms ease !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 8px center !important;
+    padding-right: 28px !important;
+}
+
+.cm-menu-combo:hover,
+#cm-manager-dialog select:hover {
+    border-color: #2a2a2e !important;
+    color: #f4f4f5 !important;
+}
+
+.cm-menu-combo:focus,
+#cm-manager-dialog select:focus {
+    border-color: #818cf8 !important;
+    outline: none !important;
+}
+
+#cm-manager-dialog select option {
+    background: #18181b !important;
+    color: #f4f4f5 !important;
+}
+
+/* Standard buttons (Community Manual, Workflow Gallery, Nodes Info, etc.) */
+.cm-button,
+#cm-manager-dialog button {
+    background: #0a0a0a !important;
+    border: 1px solid #222226 !important;
+    border-radius: 8px !important;
+    color: #a1a1aa !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    padding: 8px 16px !important;
+    cursor: pointer !important;
+    transition: border-color 150ms ease, color 150ms ease, background 150ms ease !important;
+    filter: none !important;
+}
+
+.cm-button:hover,
+#cm-manager-dialog button:hover {
+    border-color: #2a2a2e !important;
+    color: #f4f4f5 !important;
+    background: rgba(244,244,245,0.04) !important;
+    filter: none !important;
+}
+
+/* Small buttons */
+.cm-small-button {
+    font-size: 12px !important;
+    padding: 5px 12px !important;
+}
+
+/* Red/danger buttons */
+.cm-button-red,
+#cm-manager-dialog .cm-button-red {
+    background: #0a0a0a !important;
+    border-color: rgba(239,68,68,0.3) !important;
+    color: #71717a !important;
+}
+
+.cm-button-red:hover,
+#cm-manager-dialog .cm-button-red:hover {
+    border-color: #ef4444 !important;
+    color: #ef4444 !important;
+    background: rgba(239,68,68,0.05) !important;
+}
+
+/* Orange/emphasis buttons — neutralize to ghost */
+.cm-button-orange,
+#cm-manager-dialog .cm-button-orange {
+    background: #0a0a0a !important;
+    border: 1px solid #222226 !important;
+    color: #a1a1aa !important;
+}
+
+.cm-button-orange:hover,
+#cm-manager-dialog .cm-button-orange:hover {
+    border-color: #2a2a2e !important;
+    color: #f4f4f5 !important;
+    background: rgba(244,244,245,0.04) !important;
+}
+
+/* Experimental section */
+.cm-experimental {
+    border: 1px solid #1e1e22 !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    background: transparent !important;
+}
+
+.cm-experimental-legend {
+    color: #52525b !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    background: #0a0a0a !important;
+    padding: 2px 8px !important;
+}
+
+.cm-experimental-button {
+    font-size: 12px !important;
+}
+
+/* Notice board (Keywords, Issue News) */
+.cm-notice-board {
+    background: #18181b !important;
+    border: 1px solid #1e1e22 !important;
+    border-radius: 8px !important;
+    color: #a1a1aa !important;
+    font-size: 13px !important;
+    padding: 12px 16px !important;
+}
+
+.cm-notice-board h3,
+.cm-notice-board b,
+.cm-notice-board strong {
+    color: #f4f4f5 !important;
+}
+
+.cm-notice-board hr {
+    border-color: #1e1e22 !important;
+}
+
+.cm-notice-board a {
+    color: #818cf8 !important;
+}
+
+/* Title bar */
+#cm-manager-dialog .comfy-modal-content > h2,
+#cm-manager-dialog h2,
+#cm-manager-dialog h3 {
+    color: #f4f4f5 !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    font-weight: 600 !important;
+}
+
+/* Tables inside the dialog */
+#cm-manager-dialog table {
+    border-collapse: collapse !important;
+}
+
+#cm-manager-dialog table td {
+    padding: 4px 8px !important;
+    border: none !important;
+}
+
+/* Close button override */
+#cm-manager-dialog .p-dialog-header-close,
+#cm-manager-dialog > button:last-child {
+    color: #71717a !important;
+}
+
+#cm-manager-dialog .p-dialog-header-close:hover,
+#cm-manager-dialog > button:last-child:hover {
+    color: #f4f4f5 !important;
+}
+
+/* Share dropdown menu */
+.cm-share-menu,
+.cm-dropdown-menu {
+    background: #0a0a0a !important;
+    border: 1px solid #1e1e22 !important;
+    border-radius: 8px !important;
+    padding: 4px !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5) !important;
+}
+
+.cm-share-menu a,
+.cm-share-menu button,
+.cm-dropdown-menu a,
+.cm-dropdown-menu button {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 6px !important;
+    color: #a1a1aa !important;
+    padding: 8px 12px !important;
+    display: block !important;
+    width: 100% !important;
+    text-align: left !important;
+    transition: background 150ms ease, color 150ms ease !important;
+}
+
+.cm-share-menu a:hover,
+.cm-share-menu button:hover,
+.cm-dropdown-menu a:hover,
+.cm-dropdown-menu button:hover {
+    background: rgba(244,244,245,0.06) !important;
+    color: #f4f4f5 !important;
+}
 `;
 
 /* ═══════════════════════════════════════════════════════════════════
