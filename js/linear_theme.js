@@ -2698,6 +2698,7 @@ button.comfyui-button.primary:hover,
 [class*="z-1200"].p-buttongroup,
 [class*="z-1200"][class*="bg-comfy-menu-bg"],
 .p-buttongroup[class*="bottom-0"][class*="right-0"][class*="z-1200"] {
+    background: rgba(9,9,11,0.82) !important;
     backdrop-filter: blur(16px) !important;
     -webkit-backdrop-filter: blur(16px) !important;
     border-color: rgba(30,30,34,0.7) !important;
