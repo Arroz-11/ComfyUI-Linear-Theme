@@ -820,23 +820,6 @@ table td {
     color: var(--linear-text-muted) !important;
 }
 
-/* Litegraph context menu — minimal, native-like */
-.litecontextmenu {
-    background: var(--linear-surface) !important;
-    border: 1px solid var(--linear-border) !important;
-    box-shadow: 0 8px 24px -4px rgba(0,0,0,0.5) !important;
-    color: var(--linear-text-primary) !important;
-}
-
-.litecontextmenu .litemenu-entry {
-    color: var(--linear-text-primary) !important;
-    background: transparent !important;
-}
-
-.litecontextmenu .litemenu-entry:hover {
-    background: var(--linear-accent-subtle) !important;
-}
-
 /* ============================================
    Sidebar / Panels
    ============================================ */
