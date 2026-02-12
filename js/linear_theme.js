@@ -985,21 +985,22 @@ table td {
     max-height: 300px !important;
 }
 
-/* New search component v0.13+ */
-.invisible-dialog-root {
+/* New search component v0.13+ — dialog must be invisible */
+.invisible-dialog-root,
+.p-dialog.invisible-dialog-root {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
     overflow: visible !important;
 }
-.node-search-box-dialog-mask {
-    background: transparent !important;
+.node-search-box-dialog-mask,
+.p-dialog-mask.node-search-box-dialog-mask {
+    background: rgba(0,0,0,0.25) !important;
 }
 
 /* Node search container & autocomplete */
 .comfy-vue-node-search-container,
-.node-search-box,
-[class*="node-search"] {
+.node-search-box {
     background: var(--linear-surface) !important;
     border: 1px solid var(--linear-border) !important;
     border-radius: 10px !important;
@@ -1071,9 +1072,21 @@ table td {
 .comfy-vue-node-search-container .p-badge,
 .comfy-vue-node-search-container [class*="badge"],
 .node-search-box .p-tag {
-    background: rgba(244,244,245,0.08) !important;
-    color: var(--linear-text-secondary) !important;
-    border: 1px solid var(--linear-border) !important;
+    background: rgba(244,244,245,0.06) !important;
+    color: var(--linear-text-muted) !important;
+    border: 1px solid rgba(39,39,42,0.6) !important;
+    border-radius: 6px !important;
+    padding: 2px 8px !important;
+    font-size: 11px !important;
+    font-weight: 400 !important;
+    line-height: 1.4 !important;
+}
+
+/* Badge container — flex with gap */
+.comfy-vue-node-search-container .option-badges {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
 }
 
 /* Search result secondary text */
