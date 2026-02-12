@@ -1551,8 +1551,19 @@ table td {
    Extension Registration
    ═══════════════════════════════════════════════════════════════════ */
 
+function stripNodeColor(node) {
+    delete node.color;
+    delete node.bgcolor;
+}
+
 comfyApp.registerExtension({
     name: "Comfy.LinearTheme",
+    nodeCreated(node) {
+        stripNodeColor(node);
+    },
+    loadedGraphNode(node) {
+        stripNodeColor(node);
+    },
     async setup() {
         // Inject CSS
         const existing = document.getElementById("linear-theme-css");
