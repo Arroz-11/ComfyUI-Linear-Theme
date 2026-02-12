@@ -3104,28 +3104,11 @@ comfyApp.registerExtension({
             }
         }
 
-        // Fix connection link colors — fill empty byType entries and update defaults
+        // Fix connecting link color — match the palette's output_on so dragging
+        // doesn't change color for types without a byType entry
         if (canvas) {
-            // Default connection colors (fallback when type has no color)
-            canvas.default_connection_color = {
-                input_off: "#3f3f46",
-                input_on: "#a1a1aa",
-                output_off: "#3f3f46",
-                output_on: "#a1a1aa"
-            };
-
-            // Fill empty byType colors so dragging links match connected links
-            const byType = canvas.default_connection_color_byType;
-            if (byType) {
-                for (const [type, color] of Object.entries(THEME.SLOT_COLORS)) {
-                    byType[type] = color;
-                }
-                // Common types that ComfyUI leaves empty
-                if (!byType["STRING"]) byType["STRING"] = "#a1a1aa";
-                if (!byType["FLOAT"]) byType["FLOAT"] = "#71717a";
-                if (!byType["COMBO"]) byType["COMBO"] = "#71717a";
-                if (!byType["BOOLEAN"]) byType["BOOLEAN"] = "#71717a";
-            }
+            const onColor = canvas.default_connection_color?.output_on || "#7F7";
+            LiteGraph.CONNECTING_LINK_COLOR = onColor;
         }
 
         // Patch image dimension text font (drawn as "10px sans-serif" by default)
