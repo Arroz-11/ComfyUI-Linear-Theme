@@ -254,13 +254,23 @@ const CSS = `
     /* ── PrimeVue button ── */
     --p-button-background: #141417;
     --p-button-border-color: #222226;
-    --p-button-color: #f4f4f5;
+    --p-button-color: #a1a1aa;
     --p-button-hover-background: #1e1e22;
     --p-button-hover-border-color: #2a2a2e;
     --p-button-hover-color: #ffffff;
     --p-button-active-background: #222226;
     --p-button-active-border-color: #2a2a2e;
     --p-button-focus-ring-color: rgba(129,140,248,0.4);
+
+    /* ── PrimeVue button primary (prevent blue) ── */
+    --p-button-primary-background: #141417;
+    --p-button-primary-border-color: #222226;
+    --p-button-primary-color: #a1a1aa;
+    --p-button-primary-hover-background: #1e1e22;
+    --p-button-primary-hover-border-color: #2a2a2e;
+    --p-button-primary-hover-color: #f4f4f5;
+    --p-button-primary-active-background: #222226;
+    --p-button-primary-active-border-color: #2a2a2e;
 
     /* ── PrimeVue select / dropdown ── */
     --p-select-background: #141417;
@@ -525,6 +535,13 @@ select:focus,
     border-color: var(--linear-accent-secondary) !important;
     outline: none !important;
     box-shadow: 0 0 0 2px rgba(129,140,248,0.2) !important;
+}
+
+/* Native select options */
+select option,
+select optgroup {
+    background: #0c0c0e !important;
+    color: #f4f4f5 !important;
 }
 
 /* Dropdown panels / overlays */
