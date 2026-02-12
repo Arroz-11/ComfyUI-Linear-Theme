@@ -389,6 +389,7 @@ body,
 body.litegraph {
     background: #09090b !important;
     color: #f4f4f5 !important;
+    font-family: 'Inter', Arial, sans-serif !important;
 }
 
 /* ============================================
@@ -595,11 +596,13 @@ input[type="email"],
 input[type="url"],
 textarea,
 .p-inputtext,
-.p-textarea {
+.p-textarea,
+.comfy-multiline-input {
     background: var(--input-surface) !important;
     border: 1px solid var(--input-border) !important;
     border-radius: 6px !important;
     color: var(--linear-text-primary) !important;
+    font-family: 'Inter', Arial, sans-serif !important;
     box-shadow: none !important;
     transition: border-color 150ms ease, box-shadow 150ms ease !important;
 }
@@ -838,6 +841,53 @@ table td {
 
 .p-menuitem .p-menuitem-icon {
     color: var(--linear-text-muted) !important;
+}
+
+/* Litegraph context menu — forced styling */
+.litegraph.litecontextmenu,
+.litegraph.litecontextmenu.dark {
+    background: var(--comfy-menu-bg) !important;
+    border: 1px solid var(--linear-border) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 24px -4px rgba(0,0,0,0.5) !important;
+    color: var(--linear-text-primary) !important;
+    font-family: 'Inter', Arial, sans-serif !important;
+    overflow: hidden !important;
+    z-index: 9999 !important;
+}
+
+.litegraph .litemenu-entry,
+.litemenu-title {
+    font-family: 'Inter', Arial, sans-serif !important;
+    color: var(--linear-text-secondary) !important;
+    padding: 4px 8px !important;
+}
+
+.litegraph .litemenu-entry:hover:not(.disabled):not(.separator) {
+    background: rgba(244,244,245,0.06) !important;
+    color: var(--linear-text-primary) !important;
+}
+
+.litegraph .litemenu-entry.separator {
+    border-top: 1px solid var(--border-default) !important;
+    height: 0px !important;
+    margin: 3px 0 2px !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+.litegraph .litemenu-entry.has_submenu {
+    border-right: 2px solid var(--linear-accent-secondary) !important;
+}
+
+.litegraph .litemenu-entry.disabled {
+    opacity: 0.5 !important;
+    color: var(--linear-text-muted) !important;
+}
+
+.litemenu-title {
+    color: var(--linear-text-primary) !important;
+    background: var(--linear-surface-elevated) !important;
 }
 
 /* ============================================
