@@ -1583,9 +1583,20 @@ comfyApp.registerExtension({
             dotCtx.beginPath();
             dotCtx.arc(dotSize / 2, dotSize / 2, 1, 0, Math.PI * 2);
             dotCtx.fill();
-            canvas.background_image = dotCanvas.toDataURL();
+            const dotDataUrl = dotCanvas.toDataURL();
+
+            canvas.background_image = dotDataUrl;
             canvas._pattern = null;
             canvas._pattern_img = null;
+
+            // Lock BACKGROUND_IMAGE so palette loading can't overwrite it
+            if (window.LiteGraph) {
+                Object.defineProperty(LiteGraph, "BACKGROUND_IMAGE", {
+                    get() { return dotDataUrl; },
+                    set() {},
+                    configurable: true
+                });
+            }
         }
 
         // Apply slot colors
