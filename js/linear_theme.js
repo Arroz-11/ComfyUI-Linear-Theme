@@ -66,7 +66,7 @@ const CSS = `
     /* ── Base tokens ── */
     --fg-color: #f4f4f5;
     --bg-color: #09090b;
-    --comfy-menu-bg: rgba(9,9,11,0.98);
+    --comfy-menu-bg: rgba(9,9,11,0.82);
     --comfy-input-bg: #18181b;
     --input-text: #e4e4e7;
     --descrip-text: #71717a;
@@ -78,7 +78,7 @@ const CSS = `
     --contrast-mix-color: #f4f4f5;
     --tr-even-bg-color: rgba(20,20,23,0.9);
     --tr-odd-bg-color: rgba(12,12,14,0.9);
-    --comfy-menu-secondary-bg: rgba(14,14,16,0.98);
+    --comfy-menu-secondary-bg: rgba(14,14,16,0.82);
 
     /* ── Linear design tokens ── */
     --linear-accent: #f4f4f5;
@@ -123,7 +123,7 @@ const CSS = `
     --component-node-widget-secondary-text: #a1a1aa;
 
     /* ── Interface: Menu ── */
-    --interface-menu-surface: rgba(9,9,11,0.98);
+    --interface-menu-surface: rgba(9,9,11,0.82);
     --interface-menu-border: #1e1e22;
     --interface-menu-item-hover: rgba(244,244,245,0.06);
     --interface-menu-item-active: rgba(244,244,245,0.1);
@@ -131,6 +131,7 @@ const CSS = `
     --interface-menu-text-secondary: #a1a1aa;
 
     /* ── Interface: Panel / Sidebar ── */
+    --interface-stroke: #1e1e22;
     --interface-panel-surface: #0c0c0e;
     --interface-panel-border: #1e1e22;
     --interface-panel-header: #0c0c0e;
@@ -820,12 +821,14 @@ table td {
 .p-menu,
 .p-contextmenu,
 .p-menubar {
-    background: var(--linear-surface) !important;
-    border: 1px solid var(--linear-border) !important;
+    background: rgba(9,9,11,0.82) !important;
+    border: 1px solid rgba(30,30,34,0.7) !important;
     border-radius: 8px !important;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 16px 32px -8px rgba(0,0,0,0.5) !important;
+    box-shadow: none !important;
     color: var(--linear-text-primary) !important;
     overflow: hidden !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
 }
 
 .p-menuitem > .p-menuitem-content,
@@ -893,18 +896,58 @@ table td {
 /* ============================================
    Sidebar / Panels
    ============================================ */
+
+/* Kill shadow-interface globally — removes warm tinted box-shadow */
+.shadow-interface {
+    box-shadow: none !important;
+}
+
+/* Sidebar icon toolbar (left rail) */
+.side-tool-bar-container {
+    background: transparent !important;
+}
+
+.side-tool-bar-container.connected-sidebar {
+    background-color: rgba(9,9,11,0.82) !important;
+    border-color: rgba(30,30,34,0.7) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+}
+
+.side-tool-bar-container .sidebar-item-group {
+    background-color: rgba(9,9,11,0.82) !important;
+    border: 1px solid rgba(30,30,34,0.7) !important;
+    box-shadow: none !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+}
+
 .p-drawer,
 .p-sidebar,
 .comfy-sidebar,
 .side-bar-panel {
-    background: var(--interface-panel-surface) !important;
-    border-right: 1px solid var(--interface-panel-border) !important;
+    background: rgba(12,12,14,0.82) !important;
+    border-right: 1px solid rgba(30,30,34,0.7) !important;
     box-shadow: none !important;
     color: var(--linear-text-primary) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
 }
 
 .side-bar-panel {
     border-left: 1px solid var(--interface-panel-border) !important;
+}
+
+/* P-Panel used in floating panels (canvas toolbar, actionbar, etc.) */
+.p-panel {
+    box-shadow: none !important;
+}
+
+.p-panel .p-panel-content {
+    background: rgba(9,9,11,0.82) !important;
+    border-color: rgba(30,30,34,0.7) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
 }
 
 /* ============================================
@@ -1752,34 +1795,33 @@ table td {
     border-radius: 4px !important;
 }
 
-/* ── Checkboxes ── */
+/* ── Checkboxes (SVG-based via TurboGrid) ── */
 .cn-manager-grid .tg-checkbox {
-    width: 16px !important;
-    height: 16px !important;
-    min-width: 16px !important;
-    min-height: 16px !important;
-    max-width: 16px !important;
-    max-height: 16px !important;
-    border: 1px solid #222226 !important;
-    border-radius: 4px !important;
+    border: none !important;
     background: transparent !important;
-    transition: border-color 150ms ease !important;
-    box-sizing: border-box !important;
-    flex-shrink: 0 !important;
 }
 
-.cn-manager-grid .tg-checkbox-selected {
-    background: #f4f4f5 !important;
-    border-color: #f4f4f5 !important;
-}
-
-.cn-manager-grid .tg-checkbox-item {
-    color: #09090b !important;
-}
-
-.cn-manager-grid .tg-select-icon-all .tg-checkbox {
+.cn-manager-grid .tg-icon-checkbox {
     width: 16px !important;
     height: 16px !important;
+}
+
+/* Unchecked state */
+.cn-manager-grid .tg-checkbox-none {
+    stroke: #3f3f46 !important;
+    fill: none !important;
+}
+
+/* Checked state */
+.cn-manager-grid .tg-checkbox-selected {
+    stroke: #f4f4f5 !important;
+    fill: #f4f4f5 !important;
+}
+
+/* Mixed/indeterminate state */
+.cn-manager-grid .tg-checkbox-mixed {
+    stroke: #71717a !important;
+    fill: #71717a !important;
 }
 
 /* ── Highlight ── */
@@ -2154,12 +2196,12 @@ table td {
 
 /* ── Panel container ── */
 .actionbar .p-panel-content {
-    background: rgba(9,9,11,0.95) !important;
-    border: 1px solid #1e1e22 !important;
+    background: rgba(9,9,11,0.82) !important;
+    border: 1px solid rgba(30,30,34,0.7) !important;
     border-radius: 10px !important;
     padding: 4px 6px !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
 }
 
 /* When docked in top menu */
