@@ -4,18 +4,18 @@
   "name": "Linear Dark",
   "colors": {
     "node_slot": {
-      "CLIP": "#FACC15",
-      "CLIP_VISION": "#67E8F9",
+      "CLIP": "#FFD500",
+      "CLIP_VISION": "#A8DADC",
       "CLIP_VISION_OUTPUT": "#ad7452",
-      "CONDITIONING": "#FB923C",
-      "CONTROL_NET": "#34D399",
-      "IMAGE": "#60A5FA",
-      "LATENT": "#F0ABFC",
-      "MASK": "#4ADE80",
-      "MODEL": "#A78BFA",
+      "CONDITIONING": "#FFA931",
+      "CONTROL_NET": "#6EE7B7",
+      "IMAGE": "#818cf8",
+      "LATENT": "#FF9CF9",
+      "MASK": "#81C784",
+      "MODEL": "#B39DDB",
       "STYLE_MODEL": "#C2FFAE",
-      "VAE": "#F87171",
-      "TAESD": "#D4A955",
+      "VAE": "#FF6E6E",
+      "TAESD": "#DCC274",
       "PIPE_LINE": "#7737AA",
       "PIPE_LINE_SDXL": "#7737AA",
       "INT": "#29699C",
@@ -24,7 +24,7 @@
       "LORA_STACK": "#94dccd",
       "CONTROL_NET_STACK": "#94dccd",
       "FAST_MODEL_LOADER": "#ffd399",
-      "SAMPLING": "#60A5FA"
+      "SAMPLING": "#818cf8"
     },
     "litegraph_base": {
       "BACKGROUND_IMAGE": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAdUlEQVR4nO3XQQ3AMADEsHIZf4wdhb2mk2K/QyDn3vucD3T/dAAAANStn2utAwAAoG79XGsdAAAAdevnWusAAACoWz/XWgcAAEDd+rnWOgAAAOrWz7XWAQAAULd+rrUOAACAuvVzrXUAAADUrZ9rrQMAACDuBQ6pOJD0qit8AAAAAElFTkSuQmCC",
