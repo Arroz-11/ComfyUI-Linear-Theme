@@ -1,5 +1,8 @@
 import { app } from "../../scripts/app.js";
 
+// Fallback for environments where the import path differs
+const comfyApp = app || window.comfyAPI?.app?.app;
+
 /*
  * Linear Dark Theme for ComfyUI
  * Inspired by Linear, Vercel, and Raycast aesthetics.
@@ -438,7 +441,7 @@ table tr:hover {
 }
 `;
 
-app.registerExtension({
+comfyApp.registerExtension({
     name: "Comfy.LinearTheme",
     async setup() {
         // Inject CSS
@@ -448,7 +451,7 @@ app.registerExtension({
         document.head.appendChild(style);
 
         // Apply LiteGraph theme
-        const canvas = app.canvas;
+        const canvas = comfyApp.canvas;
         if (canvas) {
             for (const [key, value] of Object.entries(THEME)) {
                 if (key === "SLOT_COLORS") continue;
