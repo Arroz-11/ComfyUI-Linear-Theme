@@ -2149,6 +2149,252 @@ table td {
 }
 
 /* ============================================
+   Actionbar — Bottom Toolbar
+   ============================================ */
+
+/* ── Panel container ── */
+.actionbar .p-panel-content {
+    background: rgba(9,9,11,0.95) !important;
+    border: 1px solid #1e1e22 !important;
+    border-radius: 10px !important;
+    padding: 4px 6px !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* When docked in top menu */
+.actionbar.p-0 .p-panel-content,
+.actionbar.border-none .p-panel-content {
+    border: none !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+}
+
+/* ── Uniform height for all items ── */
+.actionbar .p-panel-content .flex > * {
+    height: 32px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+/* ── Drag handle ── */
+.actionbar .drag-handle {
+    opacity: 0.25 !important;
+    transition: opacity 150ms ease !important;
+}
+
+.actionbar .drag-handle:hover {
+    opacity: 0.6 !important;
+}
+
+/* ── Queue / Run split button ── */
+.comfyui-queue-button .p-splitbutton-button,
+.comfyui-queue-button .p-splitbutton-dropdown {
+    background: #0a0a0a !important;
+    border: 1px solid #222226 !important;
+    color: #a1a1aa !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    height: 32px !important;
+    transition: border-color 150ms ease, color 150ms ease !important;
+}
+
+.comfyui-queue-button .p-splitbutton-button {
+    border-radius: 6px 0 0 6px !important;
+    padding: 0 12px !important;
+    gap: 6px !important;
+}
+
+.comfyui-queue-button .p-splitbutton-dropdown {
+    border-radius: 0 6px 6px 0 !important;
+    border-left: none !important;
+    padding: 0 6px !important;
+}
+
+.comfyui-queue-button .p-splitbutton-button:hover,
+.comfyui-queue-button .p-splitbutton-dropdown:hover {
+    border-color: #2a2a2e !important;
+    color: #f4f4f5 !important;
+    background: rgba(244,244,245,0.04) !important;
+}
+
+/* Run label */
+.comfyui-queue-button .p-splitbutton-button .p-button-label {
+    color: inherit !important;
+    font-weight: 500 !important;
+}
+
+/* Warning icon inside run button — subtle */
+.comfyui-queue-button .p-splitbutton-button .p-button-icon {
+    color: #71717a !important;
+    font-size: 14px !important;
+}
+
+/* ── Cancel / Interrupt button (destructive) ── */
+.actionbar button[variant="destructive"],
+.actionbar .p-button-destructive,
+.actionbar button:has(.icon-\\[lucide--x\\]) {
+    background: #0a0a0a !important;
+    border: 1px solid rgba(239,68,68,0.2) !important;
+    border-radius: 6px !important;
+    color: #52525b !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: border-color 150ms ease, color 150ms ease !important;
+}
+
+.actionbar button[variant="destructive"]:hover,
+.actionbar .p-button-destructive:hover,
+.actionbar button:has(.icon-\\[lucide--x\\]):hover {
+    border-color: #ef4444 !important;
+    color: #ef4444 !important;
+    background: rgba(239,68,68,0.05) !important;
+}
+
+.actionbar button[variant="destructive"]:disabled,
+.actionbar .p-button-destructive:disabled,
+.actionbar button:has(.icon-\\[lucide--x\\]):disabled {
+    border-color: #1e1e22 !important;
+    color: #27272a !important;
+    opacity: 0.5 !important;
+}
+
+/* ── Manager button in actionbar — neutralize green ── */
+.comfyui-button.primary,
+button.comfyui-button.primary,
+.comfyui-menu-mobile-collapse.primary {
+    background: #0a0a0a !important;
+    border: 1px solid #222226 !important;
+    border-radius: 6px !important;
+    color: #a1a1aa !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    height: 32px !important;
+    padding: 0 12px !important;
+    transition: border-color 150ms ease, color 150ms ease !important;
+}
+
+.comfyui-button.primary:hover,
+button.comfyui-button.primary:hover,
+.comfyui-menu-mobile-collapse.primary:hover {
+    border-color: #2a2a2e !important;
+    color: #f4f4f5 !important;
+    background: rgba(244,244,245,0.04) !important;
+}
+
+/* ── Icon buttons in actionbar (star, bell, arrows, layout) ── */
+.actionbar .p-button-text,
+.actionbar .p-button-icon-only:not(.p-splitbutton-dropdown):not(.p-button-destructive):not(:has(.icon-\\[lucide--x\\])),
+.actionbar button[size="icon"]:not(:has(.icon-\\[lucide--x\\])) {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: 6px !important;
+    color: #52525b !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: color 150ms ease, background 150ms ease !important;
+}
+
+.actionbar .p-button-text:hover,
+.actionbar .p-button-icon-only:not(.p-splitbutton-dropdown):not(.p-button-destructive):hover,
+.actionbar button[size="icon"]:not(:has(.icon-\\[lucide--x\\])):hover {
+    color: #f4f4f5 !important;
+    background: rgba(244,244,245,0.06) !important;
+    border-color: transparent !important;
+}
+
+/* ── Batch count input ── */
+.actionbar .p-inputnumber {
+    height: 32px !important;
+}
+
+.actionbar .p-inputnumber .p-inputnumber-input {
+    background: #0a0a0a !important;
+    border: 1px solid #222226 !important;
+    border-radius: 6px !important;
+    color: #a1a1aa !important;
+    font-size: 13px !important;
+    font-variant-numeric: tabular-nums !important;
+    height: 32px !important;
+    width: 40px !important;
+    text-align: center !important;
+    padding: 0 !important;
+}
+
+.actionbar .p-inputnumber .p-inputnumber-input:focus {
+    border-color: #818cf8 !important;
+    color: #f4f4f5 !important;
+}
+
+.actionbar .p-inputnumber-button {
+    background: #0a0a0a !important;
+    border: 1px solid #222226 !important;
+    color: #52525b !important;
+    width: 20px !important;
+    transition: color 150ms ease, border-color 150ms ease !important;
+}
+
+.actionbar .p-inputnumber-button:hover {
+    color: #f4f4f5 !important;
+    border-color: #2a2a2e !important;
+    background: rgba(244,244,245,0.04) !important;
+}
+
+.actionbar .p-inputnumber-button-up {
+    border-radius: 0 6px 0 0 !important;
+}
+
+.actionbar .p-inputnumber-button-down {
+    border-radius: 0 0 6px 0 !important;
+}
+
+/* ── Queue status text ("0 active") ── */
+.actionbar span[class*="active"],
+.actionbar .queue-count,
+.actionbar .p-panel-content .flex span {
+    color: #52525b !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    font-variant-numeric: tabular-nums !important;
+    white-space: nowrap !important;
+}
+
+/* ── SplitButton dropdown menu ── */
+.comfyui-queue-button .p-menu,
+.p-splitbutton-menu,
+.p-tieredmenu {
+    background: #0a0a0a !important;
+    border: 1px solid #1e1e22 !important;
+    border-radius: 8px !important;
+    padding: 4px !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5) !important;
+}
+
+.comfyui-queue-button .p-menuitem-link,
+.p-splitbutton-menu .p-menuitem-link,
+.p-tieredmenu .p-menuitem-link {
+    border-radius: 6px !important;
+    padding: 8px 12px !important;
+    color: #a1a1aa !important;
+    transition: background 150ms ease, color 150ms ease !important;
+}
+
+.comfyui-queue-button .p-menuitem-link:hover,
+.p-splitbutton-menu .p-menuitem-link:hover,
+.p-tieredmenu .p-menuitem-link:hover {
+    background: rgba(244,244,245,0.06) !important;
+    color: #f4f4f5 !important;
+}
+
+/* ============================================
    Manager — Main Settings Panel
    ============================================ */
 
