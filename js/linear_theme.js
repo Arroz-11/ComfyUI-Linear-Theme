@@ -63,10 +63,6 @@ const CSS = `
    ============================================ */
 
 :root {
-    /* ── Spring easing (Framer Motion-like) ── */
-    --linear-spring: cubic-bezier(0.22, 1, 0.36, 1);
-    --linear-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
-
     /* ── Base tokens ── */
     --fg-color: #f4f4f5;
     --bg-color: #09090b;
@@ -135,6 +131,8 @@ const CSS = `
     --interface-panel-surface: #0c0c0e;
     --interface-panel-border: #1e1e22;
     --interface-panel-header: #0c0c0e;
+    --interface-panel-selected-surface: rgba(244,244,245,0.08);
+    --interface-panel-hover-surface: rgba(244,244,245,0.04);
 
     /* ── Dialog / Modal ── */
     --dialog-surface: #0c0c0e;
@@ -381,98 +379,6 @@ body.litegraph {
 }
 
 /* ============================================
-   Animations — Framer Motion style
-   ============================================ */
-
-/* Dialog entrance */
-.p-dialog-enter-active {
-    transition: opacity 200ms var(--linear-spring), transform 200ms var(--linear-spring) !important;
-}
-.p-dialog-enter-from {
-    opacity: 0 !important;
-    transform: translateY(8px) scale(0.98) !important;
-}
-.p-dialog-leave-active {
-    transition: opacity 150ms var(--linear-ease), transform 150ms var(--linear-ease) !important;
-}
-.p-dialog-leave-to {
-    opacity: 0 !important;
-    transform: translateY(4px) scale(0.99) !important;
-}
-
-/* Dropdown / overlay entrance */
-.p-select-overlay-enter-active,
-.p-dropdown-panel-enter-active,
-.p-listbox-enter-active,
-.p-popover-enter-active {
-    transition: opacity 150ms var(--linear-spring), transform 150ms var(--linear-spring) !important;
-}
-.p-select-overlay-enter-from,
-.p-dropdown-panel-enter-from,
-.p-listbox-enter-from,
-.p-popover-enter-from {
-    opacity: 0 !important;
-    transform: translateY(-4px) scale(0.98) !important;
-}
-.p-select-overlay-leave-active,
-.p-dropdown-panel-leave-active,
-.p-popover-leave-active {
-    transition: opacity 100ms var(--linear-ease) !important;
-}
-.p-select-overlay-leave-to,
-.p-dropdown-panel-leave-to,
-.p-popover-leave-to {
-    opacity: 0 !important;
-}
-
-/* Toast entrance */
-.p-toast-message-enter-active {
-    transition: opacity 200ms var(--linear-spring), transform 200ms var(--linear-spring) !important;
-}
-.p-toast-message-enter-from {
-    opacity: 0 !important;
-    transform: translateX(100%) !important;
-}
-.p-toast-message-leave-active {
-    transition: opacity 150ms var(--linear-ease), max-height 200ms var(--linear-ease) 100ms !important;
-}
-.p-toast-message-leave-to {
-    opacity: 0 !important;
-}
-
-/* Vue fade transitions */
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 200ms var(--linear-spring) !important;
-}
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0 !important;
-}
-
-/* Sidebar / panel slide */
-.slide-enter-active,
-.slide-panel-enter-active,
-.sidebar-enter-active {
-    transition: transform 250ms var(--linear-spring) !important;
-}
-.slide-enter-from,
-.slide-panel-enter-from,
-.sidebar-enter-from {
-    transform: translateX(-100%) !important;
-}
-.slide-leave-active,
-.slide-panel-leave-active,
-.sidebar-leave-active {
-    transition: transform 200ms var(--linear-ease) !important;
-}
-.slide-leave-to,
-.slide-panel-leave-to,
-.sidebar-leave-to {
-    transform: translateX(-100%) !important;
-}
-
-/* ============================================
    Dialog / Modal
    ============================================ */
 .manager-dialog,
@@ -480,15 +386,12 @@ body.litegraph {
     background: var(--linear-surface) !important;
     border: 1px solid var(--linear-border) !important;
     border-radius: 12px !important;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 24px 48px -12px rgba(0,0,0,0.5) !important;
+    box-shadow: none !important;
     color: var(--linear-text-primary) !important;
-    overflow: hidden !important;
 }
 
 .p-dialog-mask {
     background: var(--dialog-overlay) !important;
-    backdrop-filter: blur(4px) !important;
-    -webkit-backdrop-filter: blur(4px) !important;
 }
 
 .p-dialog-header {
@@ -524,9 +427,8 @@ button.cm-button,
     background: var(--button-surface) !important;
     border: 1px solid var(--button-border) !important;
     border-radius: 8px !important;
-    color: var(--button-text) !important;
+    color: var(--linear-text-secondary) !important;
     font-weight: 500 !important;
-    transition: background 150ms var(--linear-ease), border-color 150ms var(--linear-ease), transform 100ms var(--linear-ease), color 150ms var(--linear-ease) !important;
     box-shadow: none !important;
     cursor: pointer !important;
 }
@@ -541,34 +443,7 @@ button.cm-button:hover,
 .comfyui-split-button button:hover {
     background: var(--button-surface-hover) !important;
     border-color: var(--button-border-hover) !important;
-    color: var(--linear-accent-hover) !important;
-}
-
-.p-button:active,
-button.cm-button:active,
-.dialog button:active,
-.manager-dialog button:active,
-.comfyui-button:active,
-.comfyui-button button:active,
-.comfyui-split-button button:active {
-    transform: scale(0.98) !important;
-    background: var(--button-active-surface) !important;
-}
-
-/* Primary buttons — white accent */
-.p-button-primary,
-.p-button.p-component:not(.p-button-text):not(.p-button-outlined):not(.p-button-secondary):not(.p-button-danger):not(.p-button-help):not(.p-button-warning):not(.p-button-success):not(.p-button-info):not(.p-dialog-header-close):not(.p-button-icon-only) {
-    background: #f4f4f5 !important;
-    border-color: #f4f4f5 !important;
-    color: #09090b !important;
-    font-weight: 600 !important;
-}
-
-.p-button-primary:hover,
-.p-button.p-component:not(.p-button-text):not(.p-button-outlined):not(.p-button-secondary):not(.p-button-danger):not(.p-button-help):not(.p-button-warning):not(.p-button-success):not(.p-button-info):not(.p-dialog-header-close):not(.p-button-icon-only):hover {
-    background: #ffffff !important;
-    border-color: #ffffff !important;
-    color: #09090b !important;
+    color: var(--linear-text-primary) !important;
 }
 
 /* Danger buttons */
@@ -622,7 +497,7 @@ select,
     border-radius: 6px !important;
     color: var(--linear-text-primary) !important;
     box-shadow: none !important;
-    transition: border-color 150ms var(--linear-ease) !important;
+    transition: border-color 150ms ease !important;
 }
 
 select:hover,
@@ -657,7 +532,7 @@ select:focus,
 .p-listbox-option {
     color: var(--linear-text-primary) !important;
     border-radius: 4px !important;
-    transition: background 100ms var(--linear-ease) !important;
+    transition: background 100ms ease !important;
 }
 
 .p-select-option:hover,
@@ -694,7 +569,7 @@ textarea,
     border-radius: 6px !important;
     color: var(--linear-text-primary) !important;
     box-shadow: none !important;
-    transition: border-color 150ms var(--linear-ease), box-shadow 150ms var(--linear-ease) !important;
+    transition: border-color 150ms ease, box-shadow 150ms ease !important;
 }
 
 input:hover,
@@ -731,7 +606,7 @@ textarea::placeholder {
     color: var(--linear-text-muted) !important;
     background: transparent !important;
     border: none !important;
-    transition: color 150ms var(--linear-ease) !important;
+    transition: color 150ms ease !important;
 }
 
 .p-tab:hover {
@@ -760,7 +635,7 @@ textarea::placeholder {
 
 .workflow-tab {
     color: var(--linear-text-muted) !important;
-    transition: color 150ms var(--linear-ease), background 150ms var(--linear-ease) !important;
+    transition: color 150ms ease, background 150ms ease !important;
 }
 
 .workflow-tab:hover {
@@ -793,7 +668,7 @@ table th {
 .p-datatable-tbody > tr,
 table tr {
     border-bottom: 1px solid var(--linear-border-subtle) !important;
-    transition: background 100ms var(--linear-ease) !important;
+    transition: background 100ms ease !important;
 }
 
 .p-datatable-tbody > tr:hover,
@@ -857,7 +732,7 @@ table td {
     background: var(--input-surface) !important;
     border: 1px solid var(--input-border) !important;
     border-radius: 4px !important;
-    transition: background 150ms var(--linear-ease), border-color 150ms var(--linear-ease) !important;
+    transition: background 150ms ease, border-color 150ms ease !important;
 }
 
 .p-checkbox .p-checkbox-box.p-highlight,
@@ -876,7 +751,7 @@ table td {
 .p-toggleswitch-slider {
     background: #222226 !important;
     border: 1px solid #2a2a2e !important;
-    transition: background 200ms var(--linear-ease) !important;
+    transition: background 200ms ease !important;
 }
 
 .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider,
@@ -923,7 +798,7 @@ table td {
 .p-menuitem > .p-menuitem-content,
 .p-menuitem-link {
     color: var(--linear-text-primary) !important;
-    transition: background 100ms var(--linear-ease) !important;
+    transition: background 100ms ease !important;
 }
 
 .p-menuitem:hover > .p-menuitem-content,
@@ -943,7 +818,6 @@ table td {
 .p-drawer,
 .p-sidebar,
 .comfy-sidebar,
-.floating-sidebar,
 .side-bar-panel {
     background: var(--interface-panel-surface) !important;
     border-right: 1px solid var(--interface-panel-border) !important;
@@ -968,7 +842,7 @@ table td {
 .p-progressbar-value {
     background: #f4f4f5 !important;
     border-radius: 4px !important;
-    transition: width 300ms var(--linear-spring) !important;
+    transition: width 300ms ease !important;
 }
 
 /* ============================================
@@ -979,7 +853,7 @@ table td {
     color: var(--linear-text-muted) !important;
     background: transparent !important;
     border: none !important;
-    transition: color 150ms var(--linear-ease), background 150ms var(--linear-ease) !important;
+    transition: color 150ms ease, background 150ms ease !important;
 }
 
 .p-dialog-header-close:hover,
@@ -1025,8 +899,23 @@ table td {
     background: var(--linear-surface) !important;
     border: 1px solid var(--linear-border) !important;
     border-radius: 10px !important;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 24px 48px -12px rgba(0,0,0,0.5) !important;
-    overflow: hidden !important;
+    box-shadow: 0 16px 32px -8px rgba(0,0,0,0.5) !important;
+}
+
+.litesearchbox .helper {
+    overflow: auto !important;
+    max-height: 300px !important;
+}
+
+/* New search component v0.13 */
+.invisible-dialog-root {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+}
+.node-search-box-dialog-mask {
+    background: transparent !important;
 }
 
 .litesearchbox input {
@@ -1042,7 +931,7 @@ table td {
 .litesearchbox .lite-search-item {
     color: var(--linear-text-secondary) !important;
     padding: 6px 14px !important;
-    transition: background 100ms var(--linear-ease) !important;
+    transition: background 100ms ease !important;
 }
 
 .lite-search-item:hover,
@@ -1091,7 +980,7 @@ table td {
 
 .comfy-list-items > * {
     border-bottom: 1px solid var(--linear-border-subtle) !important;
-    transition: background 100ms var(--linear-ease) !important;
+    transition: background 100ms ease !important;
 }
 
 .comfy-list-items > *:hover {
@@ -1126,7 +1015,7 @@ table td {
 .p-tree-node,
 .p-tree-node-content {
     color: var(--linear-text-primary) !important;
-    transition: background 100ms var(--linear-ease) !important;
+    transition: background 100ms ease !important;
 }
 
 .tree-node:hover,
@@ -1234,7 +1123,7 @@ table td {
 .p-slider .p-slider-handle {
     background: #f4f4f5 !important;
     border: 2px solid #f4f4f5 !important;
-    transition: transform 100ms var(--linear-ease) !important;
+    transition: transform 100ms ease !important;
 }
 
 .p-slider .p-slider-handle:hover {
@@ -1273,7 +1162,7 @@ table td {
 
 .p-autocomplete-item {
     color: var(--linear-text-primary) !important;
-    transition: background 100ms var(--linear-ease) !important;
+    transition: background 100ms ease !important;
 }
 
 .p-autocomplete-item:hover {
@@ -1379,7 +1268,7 @@ table td {
 .p-radiobutton .p-radiobutton-box {
     background: var(--input-surface) !important;
     border: 1px solid var(--input-border) !important;
-    transition: border-color 150ms var(--linear-ease) !important;
+    transition: border-color 150ms ease !important;
 }
 
 .p-radiobutton .p-radiobutton-box.p-highlight {
@@ -1407,7 +1296,7 @@ table td {
 
 .p-breadcrumb-item-link {
     color: var(--linear-text-muted) !important;
-    transition: color 150ms var(--linear-ease) !important;
+    transition: color 150ms ease !important;
 }
 
 .p-breadcrumb-item-link:hover {
@@ -1450,7 +1339,7 @@ table td {
 .p-paginator-first,
 .p-paginator-last {
     color: var(--linear-text-secondary) !important;
-    transition: background 100ms var(--linear-ease), color 100ms var(--linear-ease) !important;
+    transition: background 100ms ease, color 100ms ease !important;
 }
 
 .p-paginator-page:hover,
