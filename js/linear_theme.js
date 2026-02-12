@@ -3096,6 +3096,22 @@ comfyApp.registerExtension({
             }
         }
 
-        console.log("[LinearTheme] Theme applied — v2.1");
+        // Patch image dimension text font (drawn as "10px sans-serif" by default)
+        const graphCanvas = document.querySelector("canvas");
+        if (graphCanvas) {
+            const ctx = graphCanvas.getContext("2d");
+            const origFillText = ctx.__proto__.fillText;
+            ctx.__proto__.fillText = function (text, x, y, maxWidth) {
+                if (typeof text === "string" && /^\d{2,5}\s*[×x]\s*\d{2,5}$/.test(text)) {
+                    this.font = "11px Inter, Arial, sans-serif";
+                    this.fillStyle = "#71717a";
+                }
+                return maxWidth !== undefined
+                    ? origFillText.call(this, text, x, y, maxWidth)
+                    : origFillText.call(this, text, x, y);
+            };
+        }
+
+        console.log("[LinearTheme] Theme applied — v2.2");
     }
 });
