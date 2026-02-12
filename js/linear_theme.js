@@ -1573,19 +1573,17 @@ comfyApp.registerExtension({
                 }
             }
 
-            // Replace cross grid with dot pattern (10px spacing, same as obsidian grid)
+            // Replace cross grid with square dot pattern (10px spacing)
             const tileSize = 100;
             const dotSpacing = 10;
             const dotCanvas = document.createElement("canvas");
             dotCanvas.width = tileSize;
             dotCanvas.height = tileSize;
             const dotCtx = dotCanvas.getContext("2d");
-            dotCtx.fillStyle = "rgba(255,255,255,0.09)";
+            dotCtx.fillStyle = "rgba(255,255,255,0.14)";
             for (let gy = 0; gy < tileSize; gy += dotSpacing) {
                 for (let gx = 0; gx < tileSize; gx += dotSpacing) {
-                    dotCtx.beginPath();
-                    dotCtx.arc(gx, gy, 0.8, 0, Math.PI * 2);
-                    dotCtx.fill();
+                    dotCtx.fillRect(gx, gy, 1, 1);
                 }
             }
             const dotDataUrl = dotCanvas.toDataURL();
