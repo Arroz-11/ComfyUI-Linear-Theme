@@ -1560,32 +1560,19 @@ comfyApp.registerExtension({
                 }
             }
 
-            // Replace cross grid with dot grid
-            canvas.render_grid = false;
-
-            const _origOnDrawBg = canvas.onDrawBackground;
-            canvas.onDrawBackground = function(ctx) {
-                if (_origOnDrawBg) _origOnDrawBg.call(this, ctx);
-
-                const area = this.visible_area;
-                if (!area) return;
-
-                const gridSize = 48;
-                const startX = Math.floor(area[0] / gridSize) * gridSize;
-                const startY = Math.floor(area[1] / gridSize) * gridSize;
-                const endX = Math.ceil((area[0] + area[2]) / gridSize) * gridSize;
-                const endY = Math.ceil((area[1] + area[3]) / gridSize) * gridSize;
-
-                ctx.fillStyle = "rgba(255,255,255,0.04)";
-                ctx.beginPath();
-                for (let x = startX; x <= endX; x += gridSize) {
-                    for (let y = startY; y <= endY; y += gridSize) {
-                        ctx.moveTo(x + 1.2, y);
-                        ctx.arc(x, y, 1.2, 0, Math.PI * 2);
-                    }
-                }
-                ctx.fill();
-            };
+            // Replace cross grid with dot pattern
+            const dotSize = 48;
+            const dotCanvas = document.createElement("canvas");
+            dotCanvas.width = dotSize;
+            dotCanvas.height = dotSize;
+            const dotCtx = dotCanvas.getContext("2d");
+            dotCtx.fillStyle = "rgba(255,255,255,0.07)";
+            dotCtx.beginPath();
+            dotCtx.arc(dotSize / 2, dotSize / 2, 1, 0, Math.PI * 2);
+            dotCtx.fill();
+            canvas.background_image = dotCanvas.toDataURL();
+            canvas._pattern = null;
+            canvas._pattern_img = null;
         }
 
         // Apply slot colors
