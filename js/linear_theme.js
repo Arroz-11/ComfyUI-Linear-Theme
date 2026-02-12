@@ -3104,11 +3104,23 @@ comfyApp.registerExtension({
             }
         }
 
-        // Fix connecting link color — match the palette's output_on so dragging
-        // doesn't change color for types without a byType entry
-        if (canvas) {
-            const onColor = canvas.default_connection_color?.output_on || "#7F7";
-            LiteGraph.CONNECTING_LINK_COLOR = onColor;
+        // Dynamic CONNECTING_LINK_COLOR — returns the type color of whatever
+        // slot is being dragged, so links don't change color mid-drag
+        if (canvas && window.LiteGraph) {
+            const fallback = canvas.default_connection_color?.output_on || "#7F7";
+            Object.defineProperty(LiteGraph, "CONNECTING_LINK_COLOR", {
+                get() {
+                    const c = comfyApp.canvas;
+                    const slot = c?.connecting_output || c?.connecting_input;
+                    if (slot?.type) {
+                        const tc = c.default_connection_color_byType?.[slot.type];
+                        if (tc) return tc;
+                    }
+                    return fallback;
+                },
+                set() {},
+                configurable: true
+            });
         }
 
         // Patch image dimension text font (drawn as "10px sans-serif" by default)
