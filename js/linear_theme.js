@@ -3104,17 +3104,21 @@ comfyApp.registerExtension({
             }
         }
 
-        // Dynamic CONNECTING_LINK_COLOR — returns the type color of whatever
-        // slot is being dragged, so links don't change color mid-drag
+        // Dynamic CONNECTING_LINK_COLOR — reads the type from the link being
+        // dragged (connecting_links[0].output/input.type) and returns its
+        // byType color so links don't change color mid-drag
         if (canvas && window.LiteGraph) {
             const fallback = canvas.default_connection_color?.output_on || "#7F7";
             Object.defineProperty(LiteGraph, "CONNECTING_LINK_COLOR", {
                 get() {
                     const c = comfyApp.canvas;
-                    const slot = c?.connecting_output || c?.connecting_input;
-                    if (slot?.type) {
-                        const tc = c.default_connection_color_byType?.[slot.type];
-                        if (tc) return tc;
+                    const links = c?.connecting_links || c?._connecting_links;
+                    if (links && links.length > 0) {
+                        const type = links[0].output?.type || links[0].input?.type;
+                        if (type) {
+                            const tc = c.default_connection_color_byType?.[type];
+                            if (tc) return tc;
+                        }
                     }
                     return fallback;
                 },
