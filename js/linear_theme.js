@@ -2361,6 +2361,7 @@ button.comfyui-button.primary:hover,
 .actionbar .p-inputnumber .p-inputnumber-input {
     background: #0a0a0a !important;
     border: 1px solid #222226 !important;
+    border-right: none !important;
     border-radius: 4px 0 0 4px !important;
     color: #a1a1aa !important;
     font-size: 12px !important;
@@ -2379,6 +2380,7 @@ button.comfyui-button.primary:hover,
 .actionbar .p-inputnumber-button {
     background: #0a0a0a !important;
     border: 1px solid #222226 !important;
+    border-left: none !important;
     color: #52525b !important;
     width: 16px !important;
     height: 15px !important;
@@ -2410,6 +2412,7 @@ button.comfyui-button.primary:hover,
 
 .actionbar .p-inputnumber-button-down {
     border-radius: 0 0 4px 0 !important;
+    border-top: none !important;
 }
 
 /* ── Queue status text ("0 active") ── */
@@ -2685,6 +2688,337 @@ button.comfyui-button.primary:hover,
 .cm-dropdown-menu button:hover {
     background: rgba(244,244,245,0.06) !important;
     color: #f4f4f5 !important;
+}
+
+/* ============================================
+   Canvas Bottom Toolbar — Glassmorphism
+   ============================================ */
+
+/* ButtonGroup at z-1200 (GraphCanvasMenu) */
+[class*="z-1200"].p-buttongroup,
+[class*="z-1200"][class*="bg-comfy-menu-bg"],
+.p-buttongroup[class*="bottom-0"][class*="right-0"][class*="z-1200"] {
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-color: rgba(30,30,34,0.7) !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+}
+
+/* Individual buttons inside canvas toolbar */
+[class*="z-1200"] > button,
+[class*="z-1200"] .p-button {
+    background: transparent !important;
+    border: none !important;
+    color: #52525b !important;
+    transition: color 150ms ease, background 150ms ease !important;
+}
+
+[class*="z-1200"] > button:hover,
+[class*="z-1200"] .p-button:hover {
+    color: #f4f4f5 !important;
+    background: rgba(244,244,245,0.06) !important;
+}
+
+/* Dividers inside canvas toolbar */
+[class*="z-1200"] [class*="bg-node-divider"],
+[class*="z-1200"] > div[class*="w-\\[1px\\]"] {
+    background: rgba(30,30,34,0.7) !important;
+}
+
+/* ============================================
+   Node Library / Nodes Map — Sidebar Panel
+   ============================================ */
+
+/* Sidebar tab header toolbar */
+.comfy-vue-side-bar-header {
+    background: transparent !important;
+    border-bottom: 1px solid var(--linear-border) !important;
+    padding: 8px 12px !important;
+}
+
+.comfy-vue-side-bar-header .p-toolbar {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    min-height: unset !important;
+}
+
+.comfy-vue-side-bar-header .p-toolbar .p-button {
+    background: transparent !important;
+    border: none !important;
+    color: #52525b !important;
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    border-radius: 6px !important;
+    transition: color 150ms ease, background 150ms ease !important;
+}
+
+.comfy-vue-side-bar-header .p-toolbar .p-button:hover {
+    color: #f4f4f5 !important;
+    background: rgba(244,244,245,0.06) !important;
+}
+
+/* Search box in node library */
+.node-lib-search-box {
+    background: transparent !important;
+    padding: 8px 12px !important;
+}
+
+.node-lib-search-box input,
+.node-lib-search-box .p-inputtext {
+    background: var(--input-surface) !important;
+    border: 1px solid var(--input-border) !important;
+    border-radius: 6px !important;
+    color: var(--linear-text-primary) !important;
+    font-size: 13px !important;
+    height: 32px !important;
+}
+
+.node-lib-search-box input:focus,
+.node-lib-search-box .p-inputtext:focus {
+    border-color: var(--linear-accent-secondary) !important;
+    box-shadow: 0 0 0 2px rgba(129,140,248,0.2) !important;
+}
+
+/* Tree explorer */
+.node-lib-tree-explorer {
+    background: transparent !important;
+}
+
+.node-lib-tree-explorer .tree-explorer {
+    background: transparent !important;
+}
+
+.node-lib-tree-explorer .p-tree {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 4px !important;
+}
+
+.node-lib-tree-explorer .p-tree-node-content {
+    border-radius: 6px !important;
+    padding: 4px 8px !important;
+    margin: 1px 0 !important;
+    transition: background 100ms ease !important;
+}
+
+.node-lib-tree-explorer .p-tree-node-content:hover {
+    background: rgba(244,244,245,0.04) !important;
+}
+
+.node-lib-tree-explorer .p-tree-node-content.p-highlight,
+.node-lib-tree-explorer .p-tree-node.p-tree-node-selected > .p-tree-node-content {
+    background: rgba(244,244,245,0.08) !important;
+}
+
+/* Tree node labels */
+.node-lib-tree-explorer .p-tree-node-label {
+    color: var(--linear-text-secondary) !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+
+.node-lib-tree-explorer .p-tree-node-content:hover .p-tree-node-label,
+.node-lib-tree-explorer .p-tree-node-content.p-highlight .p-tree-node-label {
+    color: var(--linear-text-primary) !important;
+}
+
+/* Toggle icons (chevrons) */
+.node-lib-tree-explorer .p-tree-node-toggle-button,
+.node-lib-tree-explorer .p-tree-toggler {
+    color: #3f3f46 !important;
+    width: 20px !important;
+    height: 20px !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.node-lib-tree-explorer .p-tree-node-toggle-button:hover,
+.node-lib-tree-explorer .p-tree-toggler:hover {
+    color: #71717a !important;
+    background: transparent !important;
+}
+
+/* Folder icons */
+.node-lib-tree-explorer .p-tree-node-icon {
+    color: #52525b !important;
+    font-size: 14px !important;
+}
+
+.node-lib-tree-explorer .p-tree-node-content:hover .p-tree-node-icon {
+    color: #71717a !important;
+}
+
+/* Leaf count badges */
+.leaf-count-badge {
+    background: rgba(244,244,245,0.05) !important;
+    color: #3f3f46 !important;
+    font-size: 11px !important;
+    font-weight: 400 !important;
+    border-radius: 4px !important;
+    padding: 1px 6px !important;
+    border: none !important;
+    min-width: unset !important;
+}
+
+/* Node preview popup */
+.node-lib-node-preview,
+#node-library-node-preview-container {
+    background: var(--linear-surface) !important;
+    border: 1px solid var(--linear-border) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 24px -4px rgba(0,0,0,0.5) !important;
+    color: var(--linear-text-primary) !important;
+    overflow: hidden !important;
+}
+
+/* Bookmark tree */
+.node-lib-bookmark-tree-explorer {
+    background: transparent !important;
+}
+
+.node-lib-bookmark-tree-explorer .p-tree {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* ============================================
+   Templates Panel — Linear Redesign
+   ============================================ */
+
+/* Template selector dialog — ensure dark background */
+.workflow-template-selector,
+[class*="template-selector"],
+.p-dialog:has([class*="template"]) .p-dialog-content {
+    background: var(--linear-surface) !important;
+    color: var(--linear-text-primary) !important;
+}
+
+/* Left side panel (categories) */
+.workflow-template-selector .left-side-panel,
+[class*="template"] .left-side-panel,
+.left-side-panel {
+    background: transparent !important;
+    border-right: 1px solid var(--linear-border) !important;
+}
+
+.left-side-panel .p-listbox {
+    background: transparent !important;
+    border: none !important;
+}
+
+.left-side-panel .p-listbox-option {
+    border-radius: 6px !important;
+    color: var(--linear-text-secondary) !important;
+    transition: background 100ms ease, color 100ms ease !important;
+    margin: 1px 4px !important;
+}
+
+.left-side-panel .p-listbox-option:hover {
+    background: rgba(244,244,245,0.04) !important;
+    color: var(--linear-text-primary) !important;
+}
+
+.left-side-panel .p-listbox-option.p-highlight,
+.left-side-panel .p-listbox-option.p-selected {
+    background: rgba(244,244,245,0.08) !important;
+    color: var(--linear-text-primary) !important;
+}
+
+/* Template cards */
+[class*="template"] .p-card,
+.workflow-template-card,
+[class*="variant-ghost"][class*="rounded-lg"] {
+    background: var(--linear-surface) !important;
+    border: 1px solid var(--linear-border) !important;
+    border-radius: 8px !important;
+    transition: border-color 150ms ease, background 150ms ease !important;
+    overflow: hidden !important;
+}
+
+[class*="template"] .p-card:hover,
+.workflow-template-card:hover,
+[class*="variant-ghost"][class*="rounded-lg"]:hover {
+    border-color: var(--linear-border-hover) !important;
+    background: var(--linear-surface-elevated) !important;
+}
+
+/* Card thumbnail area */
+[class*="template"] .p-card img,
+.workflow-template-card img {
+    border-radius: 6px !important;
+    opacity: 0.9 !important;
+    transition: opacity 150ms ease !important;
+}
+
+[class*="template"] .p-card:hover img,
+.workflow-template-card:hover img {
+    opacity: 1 !important;
+}
+
+/* Card title / description */
+[class*="template"] .p-card .p-card-title,
+.workflow-template-card [class*="font-semibold"] {
+    color: var(--linear-text-primary) !important;
+    font-weight: 500 !important;
+}
+
+[class*="template"] .p-card .p-card-subtitle,
+.workflow-template-card [class*="text-muted"] {
+    color: var(--linear-text-muted) !important;
+    font-size: 13px !important;
+}
+
+/* Template search area */
+[class*="template"] .p-iconfield,
+.workflow-template-selector .p-iconfield {
+    background: transparent !important;
+}
+
+/* MultiSelect / SingleSelect filters in template dialog */
+[class*="template"] .p-multiselect,
+[class*="template"] .p-select {
+    background: var(--input-surface) !important;
+    border: 1px solid var(--input-border) !important;
+    border-radius: 6px !important;
+    color: var(--linear-text-primary) !important;
+    font-size: 13px !important;
+}
+
+[class*="template"] .p-multiselect:hover,
+[class*="template"] .p-select:hover {
+    border-color: var(--linear-border-hover) !important;
+}
+
+/* SquareChip tags in templates */
+[class*="template"] .square-chip,
+.square-chip {
+    background: rgba(244,244,245,0.06) !important;
+    border: 1px solid var(--linear-border) !important;
+    border-radius: 4px !important;
+    color: var(--linear-text-muted) !important;
+    font-size: 11px !important;
+}
+
+/* Skeleton loading in templates */
+[class*="template"] .p-skeleton,
+[class*="template"] [class*="animate-pulse"] {
+    background: var(--linear-surface-elevated) !important;
+    border-radius: 6px !important;
+}
+
+/* Result count / status text */
+[class*="template"] [class*="text-neutral"],
+[class*="template"] [class*="text-muted"] {
+    color: var(--linear-text-muted) !important;
+}
+
+/* Section headers inside template dialog */
+[class*="template"] [class*="text-2xl"],
+[class*="template"] [class*="font-semibold"] {
+    color: var(--linear-text-primary) !important;
 }
 `;
 
