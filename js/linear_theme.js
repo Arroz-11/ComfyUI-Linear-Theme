@@ -446,6 +446,18 @@ button.cm-button:hover,
     color: var(--linear-text-primary) !important;
 }
 
+/* Primary buttons — force ghost, prevent PrimeVue blue */
+.p-button-primary {
+    background: var(--button-surface) !important;
+    border: 1px solid var(--button-border) !important;
+    color: var(--linear-text-secondary) !important;
+}
+.p-button-primary:hover {
+    background: var(--button-surface-hover) !important;
+    border-color: var(--button-border-hover) !important;
+    color: var(--linear-text-primary) !important;
+}
+
 /* Danger buttons */
 .p-button-danger,
 button[style*="background-color: red"],
@@ -784,9 +796,7 @@ table td {
    ============================================ */
 .p-menu,
 .p-contextmenu,
-.p-menubar,
-.litegraph .litemenu-entry,
-.litecontextmenu {
+.p-menubar {
     background: var(--linear-surface) !important;
     border: 1px solid var(--linear-border) !important;
     border-radius: 8px !important;
@@ -802,14 +812,29 @@ table td {
 }
 
 .p-menuitem:hover > .p-menuitem-content,
-.p-menuitem-link:hover,
-.litegraph .litemenu-entry:hover,
-.litecontextmenu .litemenu-entry:hover {
+.p-menuitem-link:hover {
     background: var(--linear-accent-subtle) !important;
 }
 
 .p-menuitem .p-menuitem-icon {
     color: var(--linear-text-muted) !important;
+}
+
+/* Litegraph context menu — minimal, native-like */
+.litecontextmenu {
+    background: var(--linear-surface) !important;
+    border: 1px solid var(--linear-border) !important;
+    box-shadow: 0 8px 24px -4px rgba(0,0,0,0.5) !important;
+    color: var(--linear-text-primary) !important;
+}
+
+.litecontextmenu .litemenu-entry {
+    color: var(--linear-text-primary) !important;
+    background: transparent !important;
+}
+
+.litecontextmenu .litemenu-entry:hover {
+    background: var(--linear-accent-subtle) !important;
 }
 
 /* ============================================
@@ -907,7 +932,7 @@ table td {
     max-height: 300px !important;
 }
 
-/* New search component v0.13 */
+/* New search component v0.13+ */
 .invisible-dialog-root {
     background: transparent !important;
     border: none !important;
@@ -916,6 +941,107 @@ table td {
 }
 .node-search-box-dialog-mask {
     background: transparent !important;
+}
+
+/* Node search container & autocomplete */
+.comfy-vue-node-search-container,
+.node-search-box,
+[class*="node-search"] {
+    background: var(--linear-surface) !important;
+    border: 1px solid var(--linear-border) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 16px 32px -8px rgba(0,0,0,0.5) !important;
+    color: var(--linear-text-primary) !important;
+}
+
+.comfy-vue-node-search-container .p-autocomplete,
+.node-search-box .p-autocomplete {
+    background: transparent !important;
+}
+
+.comfy-vue-node-search-container .p-autocomplete-input,
+.node-search-box .p-autocomplete-input,
+.comfy-vue-node-search-container input,
+.node-search-box input {
+    background: var(--linear-surface) !important;
+    border: 1px solid var(--linear-border) !important;
+    border-radius: 8px !important;
+    color: var(--linear-text-primary) !important;
+}
+
+.comfy-vue-node-search-container .p-autocomplete-input:focus,
+.node-search-box .p-autocomplete-input:focus {
+    border-color: var(--linear-accent-secondary) !important;
+    box-shadow: 0 0 0 2px rgba(129,140,248,0.2) !important;
+}
+
+/* Search results overlay */
+.comfy-vue-node-search-container .p-autocomplete-overlay,
+.comfy-vue-node-search-container .p-autocomplete-panel,
+.node-search-box .p-autocomplete-overlay,
+.node-search-box .p-autocomplete-panel,
+.p-autocomplete-overlay {
+    background: var(--linear-surface) !important;
+    border: 1px solid var(--linear-border) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 16px 32px -8px rgba(0,0,0,0.5) !important;
+    color: var(--linear-text-primary) !important;
+}
+
+/* Search result items */
+.comfy-vue-node-search-container .p-autocomplete-option,
+.comfy-vue-node-search-container .p-autocomplete-item,
+.node-search-box .p-autocomplete-option,
+.node-search-box .p-autocomplete-item,
+.p-autocomplete-option {
+    background: transparent !important;
+    color: var(--linear-text-primary) !important;
+    border-bottom: 1px solid var(--linear-border-subtle) !important;
+}
+
+.comfy-vue-node-search-container .p-autocomplete-option:hover,
+.comfy-vue-node-search-container .p-autocomplete-item:hover,
+.p-autocomplete-option:hover,
+.p-autocomplete-option.p-focus {
+    background: var(--linear-accent-subtle) !important;
+    color: var(--linear-text-primary) !important;
+}
+
+.comfy-vue-node-search-container .p-autocomplete-option.p-highlight,
+.p-autocomplete-option.p-highlight {
+    background: rgba(244,244,245,0.1) !important;
+    color: var(--linear-text-primary) !important;
+}
+
+/* Search result badges/tags */
+.comfy-vue-node-search-container .p-tag,
+.comfy-vue-node-search-container .p-badge,
+.comfy-vue-node-search-container [class*="badge"],
+.node-search-box .p-tag {
+    background: rgba(244,244,245,0.08) !important;
+    color: var(--linear-text-secondary) !important;
+    border: 1px solid var(--linear-border) !important;
+}
+
+/* Search result secondary text */
+.comfy-vue-node-search-container .node-search-item-category,
+.comfy-vue-node-search-container [class*="category"],
+.comfy-vue-node-search-container [class*="subtitle"],
+.comfy-vue-node-search-container [class*="secondary"] {
+    color: var(--linear-text-muted) !important;
+}
+
+/* Search filter icon/button */
+.comfy-vue-node-search-container .p-button,
+.node-search-box .p-button {
+    background: var(--button-surface) !important;
+    border: 1px solid var(--button-border) !important;
+    color: var(--linear-text-secondary) !important;
+}
+
+/* Search empty state */
+.comfy-vue-node-search-container .p-autocomplete-empty-message {
+    color: var(--linear-text-muted) !important;
 }
 
 .litesearchbox input {
