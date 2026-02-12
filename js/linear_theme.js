@@ -1754,10 +1754,18 @@ table td {
 
 /* ── Checkboxes ── */
 .cn-manager-grid .tg-checkbox {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
     border: 1px solid #222226 !important;
     border-radius: 4px !important;
     background: transparent !important;
     transition: border-color 150ms ease !important;
+    box-sizing: border-box !important;
+    flex-shrink: 0 !important;
 }
 
 .cn-manager-grid .tg-checkbox-selected {
@@ -1767,6 +1775,11 @@ table td {
 
 .cn-manager-grid .tg-checkbox-item {
     color: #09090b !important;
+}
+
+.cn-manager-grid .tg-select-icon-all .tg-checkbox {
+    width: 16px !important;
+    height: 16px !important;
 }
 
 /* ── Highlight ── */
