@@ -2236,7 +2236,7 @@ table td {
 /* ── Queue / Run split button ── */
 .comfyui-queue-button .p-splitbutton-button,
 .comfyui-queue-button .p-splitbutton-dropdown {
-    background: #0a0a0a !important;
+    background: rgba(10,10,10,0.5) !important;
     border: 1px solid #222226 !important;
     color: #a1a1aa !important;
     font-size: 13px !important;
@@ -2280,7 +2280,7 @@ table td {
 .actionbar button[variant="destructive"],
 .actionbar .p-button-destructive,
 .actionbar button:has(.icon-\\[lucide--x\\]) {
-    background: #0a0a0a !important;
+    background: rgba(10,10,10,0.5) !important;
     border: 1px solid rgba(239,68,68,0.2) !important;
     border-radius: 6px !important;
     color: #52525b !important;
@@ -2313,7 +2313,7 @@ table td {
 .comfyui-button.primary,
 button.comfyui-button.primary,
 .comfyui-menu-mobile-collapse.primary {
-    background: #0a0a0a !important;
+    background: rgba(10,10,10,0.5) !important;
     border: 1px solid #222226 !important;
     border-radius: 6px !important;
     color: #a1a1aa !important;
@@ -2363,7 +2363,7 @@ button.comfyui-button.primary:hover,
 }
 
 .actionbar .p-inputnumber .p-inputnumber-input {
-    background: #0a0a0a !important;
+    background: rgba(10,10,10,0.5) !important;
     border: 1px solid #222226 !important;
     border-right: none !important;
     border-radius: 4px 0 0 4px !important;
@@ -2382,7 +2382,7 @@ button.comfyui-button.primary:hover,
 }
 
 .actionbar .p-inputnumber-button {
-    background: #0a0a0a !important;
+    background: rgba(10,10,10,0.5) !important;
     border: 1px solid #222226 !important;
     border-left: none !important;
     color: #52525b !important;
