@@ -2201,7 +2201,7 @@ table td {
 /* ── Panel container ── */
 .actionbar .p-panel-content {
     background: rgba(9,9,11,0.82) !important;
-    border: 1px solid rgba(30,30,34,0.7) !important;
+    border: none !important;
     border-radius: 10px !important;
     padding: 4px 6px !important;
     backdrop-filter: blur(16px) !important;
@@ -2370,7 +2370,7 @@ button.comfyui-button.primary:hover,
     color: #a1a1aa !important;
     font-size: 12px !important;
     font-variant-numeric: tabular-nums !important;
-    height: 30px !important;
+    height: 32px !important;
     width: 32px !important;
     text-align: center !important;
     padding: 0 !important;
@@ -2387,7 +2387,7 @@ button.comfyui-button.primary:hover,
     border-left: none !important;
     color: #52525b !important;
     width: 16px !important;
-    height: 15px !important;
+    height: 16px !important;
     padding: 0 !important;
     display: flex !important;
     align-items: center !important;
