@@ -1229,6 +1229,12 @@ table td {
     color: var(--linear-text-primary) !important;
 }
 
+/* -- Node / Group title inline editor -- */
+.node-title-editor {
+    background: rgba(20,20,23,0.95) !important;
+    border-radius: 4px !important;
+}
+
 /* -- Editable text -- */
 .editable-text {
     color: var(--linear-text-primary) !important;
