@@ -4574,29 +4574,34 @@ comfyApp.registerExtension({
                     const isBypassed = this.mode === 4;
                     const isMuted = this.mode === 2;
                     const titleColor = isBypassed ? "#4a2060" : isMuted ? "#2a2a2a" : normalTitleColor;
-                    const textColor = isBypassed ? "#b080d0" : isMuted ? "#666666" : "#e4e4e7";
-                    const r = 8;
-                    const arrowEnd = 22; // after collapse arrow circle
+                    const textColor = isBypassed ? "#e8d5f5" : isMuted ? "#666666" : "#e4e4e7";
+                    const r = titleH * 0.5; // pill radius
                     const textX = 25;
 
-                    // 1. Cover LiteGraph's clipped title (after the collapse arrow)
+                    // Force full opacity (LiteGraph reduces globalAlpha for bypass/mute)
+                    const prevAlpha = ctx.globalAlpha;
+                    ctx.globalAlpha = 1;
+
+                    // 1. Cover entire collapsed pill (overwrite LiteGraph's text)
                     ctx.fillStyle = titleColor;
                     ctx.beginPath();
-                    ctx.moveTo(arrowEnd, -titleH);
-                    ctx.lineTo(collW - r, -titleH);
-                    ctx.arcTo(collW, -titleH, collW, -titleH + r, r);
-                    ctx.lineTo(collW, -r);
-                    ctx.arcTo(collW, 0, collW - r, 0, r);
-                    ctx.lineTo(arrowEnd, 0);
-                    ctx.closePath();
+                    ctx.roundRect(0, -titleH, collW, titleH, r);
                     ctx.fill();
 
-                    // 2. Draw full title text
+                    // 2. Redraw collapse arrow dot (match expanded node style)
+                    ctx.beginPath();
+                    ctx.arc(10, -titleH * 0.5, 5, 0, Math.PI * 2);
+                    ctx.fillStyle = isBypassed ? "#c090e0" : isMuted ? "#555" : "#e4e4e7";
+                    ctx.fill();
+
+                    // 3. Draw full title text
                     ctx.font = `${fontSize}px Inter, Arial, sans-serif`;
                     ctx.fillStyle = textColor;
                     ctx.textAlign = "left";
                     ctx.textBaseline = "middle";
                     ctx.fillText(titleText, textX, -titleH * 0.5);
+
+                    ctx.globalAlpha = prevAlpha;
 
                     ctx.restore();
                 }
