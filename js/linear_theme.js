@@ -4569,7 +4569,12 @@ comfyApp.registerExtension({
                     ctx.save();
                     const fontSize = LiteGraph.NODE_TEXT_SIZE || 14;
                     const collW = this._collapsed_width || w;
-                    const titleColor = themeEditor?.config?.nodes?.titleColor || "#18181b";
+                    const normalTitleColor = themeEditor?.config?.nodes?.titleColor || "#18181b";
+                    // Respect bypass (mode 4) and mute (mode 2) states
+                    const isBypassed = this.mode === 4;
+                    const isMuted = this.mode === 2;
+                    const titleColor = isBypassed ? "#4a2060" : isMuted ? "#2a2a2a" : normalTitleColor;
+                    const textColor = isBypassed ? "#b080d0" : isMuted ? "#666666" : "#e4e4e7";
                     const r = 8;
                     const arrowEnd = 22; // after collapse arrow circle
                     const textX = 25;
@@ -4588,7 +4593,7 @@ comfyApp.registerExtension({
 
                     // 2. Draw full title text
                     ctx.font = `${fontSize}px Inter, Arial, sans-serif`;
-                    ctx.fillStyle = "#e4e4e7";
+                    ctx.fillStyle = textColor;
                     ctx.textAlign = "left";
                     ctx.textBaseline = "middle";
                     ctx.fillText(titleText, textX, -titleH * 0.5);
