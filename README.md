@@ -1,43 +1,29 @@
 # ComfyUI Linear Theme
 
-A dark, minimal theme for ComfyUI inspired by [Linear](https://linear.app), [Vercel](https://vercel.com), and [Raycast](https://www.raycast.com).
-
-Pure black canvas, glassmorphism bars, no shadows. Every pixel is intentional.
-
-![General view](screenshots/general.png)
-
-![Nodes close-up](screenshots/nodes-closeup.png)
-
-![Group colors](screenshots/group-colors.png)
-
-<p>
-  <img src="screenshots/context-menu.png" width="280">
-  <img src="screenshots/glassmorphism.png" width="60">
-</p>
+A premium dark theme for ComfyUI. Ultra-clean, minimal, and optimized for maximum FPS.
 
 ## Features
 
-- **Full CSS overhaul** — nodes, widgets, sidebars, dialogs, menus, buttons, inputs, scrollbars, tooltips, and more
-- **Glassmorphism UI** — top bar, bottom toolbar, sidebar, and floating panels with backdrop blur
-- **Context menu** — styled with rounded corners, separators, and hover effects
-- **Theme Editor** — right-click → Linear Theme → Theme Editor to customize everything in real time
-- **Execution glow** — running nodes pulse white, completed flash green, errors flash red
-- **Collapsed titles** — full title always visible on collapsed nodes
-- **Styled groups** — muted color palette, LED dot badge, frosted glass effect, inner shadows
-- **Dot grid background** — clean minimal canvas grid
-- **Color palette** for LiteGraph canvas — nodes, links, slots
+- **Complete UI overhaul** — nodes, widgets, sidebars, dialogs, menus, buttons, inputs, scrollbars, tooltips
+- **FPS Boost** — no glassmorphism, no transitions, no shadows. Idle throttle, skip rendering at low zoom, optimized execution glow
+- **Snap Guides** — alignment lines when dragging nodes
+- **Theme Editor** — right-click > Linear Theme to customize everything live
+- **Execution glow** — running nodes highlight purple, completed flash green, errors flash red
+- **Minimal groups** — thin border + dot + title, no blur or gradients
+- **Collapsed nodes** — full title always visible with color-coded dots
+- **Styled Manager** — ComfyUI Manager dialog fully themed
+- **Context menu** — clean, borderless, with proper submenu spacing
+- Color palette for LiteGraph canvas — nodes, links, slots
 - Loads automatically as a custom node extension
 
 ## Theme Editor
 
 Built-in floating panel to tweak the theme live:
 
-![Theme Editor](screenshots/theme-editor.jpeg)
-
-- **Canvas** — background color, dot grid opacity, node radius, connection width
+- **Canvas** — background color, dot grid, node radius, connection width, link color, group color, FPS boost toggle, snap guides toggle
 - **Nodes** — body, title, shadow, outline, widget colors
 - **Slots** — per-type connection colors (CLIP, MODEL, IMAGE, etc.)
-- **UI** — surfaces, borders, text colors, bars glassmorphism (color + opacity)
+- **UI** — surfaces, borders, text colors, bars color, accent colors
 - Per-field reset, save/load presets, persist across sessions
 
 ## Install
