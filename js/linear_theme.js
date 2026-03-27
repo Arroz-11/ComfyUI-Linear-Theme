@@ -422,7 +422,7 @@ input::placeholder, textarea::placeholder { color: var(--input-placeholder) !imp
 .actionbar-container { position: relative !important; background: #131313 !important; border: none !important; border-radius: 10px !important; isolation: isolate !important; }
 .actionbar-container::before { content: ''; position: absolute; inset: 0; background: #131313; border-radius: inherit; z-index: -1; pointer-events: none; }
 .actionbar.fixed, .actionbar[style*="position: fixed"], .actionbar[style*="position:fixed"] { background: #131313 !important; border: none !important; border-radius: 10px !important; }
-.graph-canvas-panel .p-buttongroup, .graph-canvas-panel span.p-buttongroup { background: #131313 !important; border: none !important; border-radius: 10px !important; outline: none !important; }
+.graph-canvas-panel .p-buttongroup, .graph-canvas-panel span.p-buttongroup, .graph-canvas-panel .p-buttongroup.bg-comfy-menu-bg { background: #131313 !important; background-color: #131313 !important; border: none !important; border-radius: 10px !important; outline: none !important; }
 .graph-canvas-panel .p-buttongroup button,
 .graph-canvas-panel .p-buttongroup .p-button,
 .graph-canvas-panel .p-buttongroup [class*="button"] { background: transparent !important; border: none !important; border-color: transparent !important; outline: none !important; color: #e4e4e7 !important; }
