@@ -1725,17 +1725,27 @@ class ThemeEditor {
     _buildDotGrid(opacity) {
         const canvas = comfyApp.canvas;
         if (!canvas) return;
-        const tileSize = 100, dotSpacing = 10;
-        const c = document.createElement("canvas");
-        c.width = tileSize; c.height = tileSize;
-        const ctx = c.getContext("2d");
-        ctx.fillStyle = `rgba(255,255,255,${opacity})`;
-        for (let gy = 0; gy < tileSize; gy += dotSpacing) {
-            for (let gx = 0; gx < tileSize; gx += dotSpacing) {
-                ctx.fillRect(gx, gy, 1, 1);
+        if (opacity <= 0) {
+            // Solid 1px tile instead of empty — fixes LiteGraph bg color bug at certain zoom levels
+            const solid = document.createElement("canvas");
+            solid.width = 1; solid.height = 1;
+            const sctx = solid.getContext("2d");
+            sctx.fillStyle = this.config.canvas.backgroundColor || "#0d0d0d";
+            sctx.fillRect(0, 0, 1, 1);
+            currentDotDataUrl = solid.toDataURL();
+        } else {
+            const tileSize = 100, dotSpacing = 10;
+            const c = document.createElement("canvas");
+            c.width = tileSize; c.height = tileSize;
+            const ctx = c.getContext("2d");
+            ctx.fillStyle = `rgba(255,255,255,${opacity})`;
+            for (let gy = 0; gy < tileSize; gy += dotSpacing) {
+                for (let gx = 0; gx < tileSize; gx += dotSpacing) {
+                    ctx.fillRect(gx, gy, 1, 1);
+                }
             }
+            currentDotDataUrl = c.toDataURL();
         }
-        currentDotDataUrl = c.toDataURL();
         canvas.background_image = currentDotDataUrl;
         canvas._pattern = null;
         canvas._pattern_img = null;
@@ -2314,7 +2324,15 @@ comfyApp.registerExtension({
                 }
                 currentDotDataUrl = dotCanvas.toDataURL();
             } else {
-                currentDotDataUrl = "";
+                // Create a solid 1px tile instead of empty string
+                // Empty BACKGROUND_IMAGE causes LiteGraph to render wrong bg color at certain zoom levels
+                // (see litegraph.js issues #276, #468)
+                const solidCanvas = document.createElement("canvas");
+                solidCanvas.width = 1; solidCanvas.height = 1;
+                const solidCtx = solidCanvas.getContext("2d");
+                solidCtx.fillStyle = THEME_DEFAULTS.canvas.backgroundColor || "#0d0d0d";
+                solidCtx.fillRect(0, 0, 1, 1);
+                currentDotDataUrl = solidCanvas.toDataURL();
             }
 
             canvas.background_image = currentDotDataUrl;
@@ -2614,18 +2632,18 @@ comfyApp.registerExtension({
             LGraphCanvas.prototype.drawFrontCanvas = function() {
                 origDrawFront.call(this);
 
-                if (!themeEditor?.config?.canvas?.snapGuides) return;
+                // Check config — default to true if not set
+                if (themeEditor?.config?.canvas?.snapGuides === false) return;
 
                 const ctx = this.ctx;
                 if (!ctx) return;
                 const graph = this.graph;
                 if (!graph?._nodes) return;
 
-                // Only when actively dragging a node
-                if (!this.node_dragged) return;
-
+                // Only when actively dragging nodes (mouse down + selected nodes + mouse moving)
                 const selected = this.selected_nodes;
                 if (!selected || Object.keys(selected).length === 0) return;
+                if (!this.last_mouse_dragging && !this.node_dragged) return;
                 const d = Object.values(selected)[0];
 
                 const THRESH = 8;
