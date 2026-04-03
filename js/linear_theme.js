@@ -1663,7 +1663,8 @@ class ThemeEditor {
         if (c.fpsBoost !== undefined && canvas) {
             canvas.render_shadows = !c.fpsBoost;
             canvas.highquality_render = !c.fpsBoost;
-            canvas.render_connection_arrows = !c.fpsBoost;
+            // Native arrows always off — we draw custom chevrons instead
+            canvas.render_connection_arrows = false;
             canvas.use_gradients = !c.fpsBoost;
             canvas.render_collapsed_slots = !c.fpsBoost;
             canvas.always_render_background = !c.fpsBoost;
@@ -2256,12 +2257,12 @@ comfyApp.registerExtension({
                 }
             }
 
-            // 3. Simplify link rendering during pan/drag
-            //    While dragging the canvas, skip drawing link labels and reduce link detail.
+            // 3. Simplify link rendering during pan/drag + draw chevron arrows at inputs
             {
                 const origDrawConnections = LGraphCanvas.prototype.drawConnections;
                 if (origDrawConnections) {
                     LGraphCanvas.prototype.drawConnections = function(ctx) {
+                        // Simplify during drag
                         if (this.dragging_canvas) {
                             const prevBorder = this.render_connections_border;
                             this.render_connections_border = false;
@@ -2269,7 +2270,78 @@ comfyApp.registerExtension({
                             this.render_connections_border = prevBorder;
                             return result;
                         }
-                        return origDrawConnections.call(this, ctx);
+                        const result = origDrawConnections.call(this, ctx);
+
+                        // Draw chevron arrows at input endpoints
+                        const graph = this.graph;
+                        if (!graph || !graph._links) return result;
+
+                        const scale = this.ds?.scale || 1;
+                        if (scale < 0.25) return result; // too zoomed out
+
+                        // Viewport bounds for culling
+                        const vx = this.visible_area?.[0] ?? 0;
+                        const vy = this.visible_area?.[1] ?? 0;
+                        const vw = this.visible_area?.[2] ?? 1e6;
+                        const vh = this.visible_area?.[3] ?? 1e6;
+                        const vx2 = vx + vw;
+                        const vy2 = vy + vh;
+
+                        const chevSize = Math.max(4, Math.min(8, 6 * scale));
+                        const defaultColor = LiteGraph.LINK_COLOR || "#52525b";
+                        const byType = this.default_connection_color_byType || {};
+
+                        ctx.save();
+                        ctx.lineWidth = 1.5 * scale;
+                        ctx.lineCap = "round";
+                        ctx.lineJoin = "round";
+
+                        for (const id in graph._links) {
+                            const link = graph._links[id];
+                            if (!link) continue;
+
+                            const srcNode = graph.getNodeById(link.origin_id);
+                            const dstNode = graph.getNodeById(link.target_id);
+                            if (!srcNode || !dstNode) continue;
+
+                            const endPos = dstNode.getConnectionPos?.(true, link.target_slot);
+                            if (!endPos) continue;
+
+                            // Viewport cull on input endpoint
+                            if (endPos[0] < vx || endPos[0] > vx2 || endPos[1] < vy || endPos[1] > vy2) continue;
+
+                            const startPos = srcNode.getConnectionPos?.(false, link.origin_slot);
+                            if (!startPos) continue;
+
+                            // Direction vector
+                            const dx = endPos[0] - startPos[0];
+                            const dy = endPos[1] - startPos[1];
+                            const len = Math.sqrt(dx * dx + dy * dy);
+                            if (len < 30) continue; // too short for a chevron
+
+                            const nx = dx / len;
+                            const ny = dy / len;
+
+                            // Chevron tip position (slightly before input slot)
+                            const tipX = endPos[0] - nx * 4;
+                            const tipY = endPos[1] - ny * 4;
+
+                            // Chevron arms (open V pointing toward input)
+                            const armX = nx * chevSize;
+                            const armY = ny * chevSize;
+                            const perpX = ny * chevSize * 0.5;
+                            const perpY = -nx * chevSize * 0.5;
+
+                            ctx.strokeStyle = byType[link.type] || defaultColor;
+                            ctx.beginPath();
+                            ctx.moveTo(tipX - armX + perpX, tipY - armY + perpY);
+                            ctx.lineTo(tipX, tipY);
+                            ctx.lineTo(tipX - armX - perpX, tipY - armY - perpY);
+                            ctx.stroke();
+                        }
+
+                        ctx.restore();
+                        return result;
                     };
                 }
             }

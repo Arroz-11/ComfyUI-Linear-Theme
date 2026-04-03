@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-linear-theme"
 description = "Dark minimal theme for ComfyUI inspired by Linear, Vercel, and Raycast. Pure black aesthetic, zinc scale, dot grid background, and ghost/outline buttons."
-version = "2.0.1"
+version = "2.0.2"
 license = { file = "LICENSE" }
 
 [project.urls]
