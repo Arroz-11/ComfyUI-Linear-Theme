@@ -4,6 +4,8 @@ A premium dark theme for ComfyUI. Pure black aesthetic, FPS-optimized, fully cus
 
 Inspired by Linear, Vercel, and Raycast.
 
+![Canvas](screenshots/01-canvas.png)
+
 ## Features
 
 ### Visual
@@ -27,6 +29,16 @@ Inspired by Linear, Vercel, and Raycast.
   - **Slots** — per-type connection colors (CLIP, MODEL, IMAGE, etc.)
   - **UI** — surfaces, borders, text, bars, accents
 - Per-field reset, save/load presets, persists across sessions
+
+![Theme Editor and menus](screenshots/02-theme-editor.png)
+
+## Screenshots
+
+### ComfyUI Manager — fully themed
+![Manager dialog](screenshots/03-manager.png)
+
+### Custom Nodes Manager
+![Custom Nodes Manager](screenshots/04-custom-nodes.png)
 
 ## Install
 
