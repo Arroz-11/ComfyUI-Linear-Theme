@@ -24,7 +24,7 @@ Mainly inspired by the Freepik Spaces canvas, with touches of Linear, Vercel, an
 
 ### Customization
 - **Theme Editor** — right-click → Linear Theme to tweak everything live
-  - **Canvas** — background, dot grid, node radius, connection width, link color, group color
+  - **Canvas** — background, node radius, connection width, link color, group color
   - **Nodes** — body, title, shadow, outline, widget colors
   - **Slots** — per-type connection colors (CLIP, MODEL, IMAGE, etc.)
   - **UI** — surfaces, borders, text, bars, accents
