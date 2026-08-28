@@ -18,7 +18,7 @@ Mainly inspired by the Freepik Spaces canvas, with touches of Linear, Vercel, an
 - **Styled Manager** — ComfyUI Manager dialog fully themed
 
 ### Performance
-- **FPS Boost** — idle throttle, low-zoom render skip, no shadowBlur, straight links
+- **FPS Boost** — idle throttle, low-zoom render skip, no shadowBlur
 - **Snap Guides** — alignment lines when dragging nodes (toggleable)
 - **Lightweight** — single JS file, no dependencies, no build step
 

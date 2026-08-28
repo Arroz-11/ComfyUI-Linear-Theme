@@ -2501,8 +2501,16 @@ comfyApp.registerExtension({
             const origFillText = ctx.__proto__.fillText;
             ctx.__proto__.fillText = function (text, x, y, maxWidth) {
                 if (typeof text === "string" && /^\d{2,5}\s*[×x]\s*\d{2,5}$/.test(text)) {
+                    // save/restore: without it the font/fillStyle mutation
+                    // leaks into every later draw on the same context
+                    this.save();
                     this.font = "11px Inter, Arial, sans-serif";
                     this.fillStyle = "#71717a";
+                    const r = maxWidth !== undefined
+                        ? origFillText.call(this, text, x, y, maxWidth)
+                        : origFillText.call(this, text, x, y);
+                    this.restore();
+                    return r;
                 }
                 return maxWidth !== undefined
                     ? origFillText.call(this, text, x, y, maxWidth)
@@ -2787,7 +2795,13 @@ comfyApp.registerExtension({
         nodeType.prototype.onDrawForeground = function (ctx) {
             try {
                 if (origDrawFg) origDrawFg.apply(this, arguments);
-            } catch(e) {}
+            } catch(e) {
+                // warn once per node type — silent swallowing hid real node errors
+                if (!nodeType.__linearThemeFgWarned) {
+                    nodeType.__linearThemeFgWarned = true;
+                    console.warn("[LinearTheme] onDrawForeground error in", nodeData?.name, e);
+                }
+            }
 
             const w = this.size[0];
             const h = this.size[1];
