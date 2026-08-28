@@ -2786,6 +2786,30 @@ comfyApp.registerExtension({
             };
         }
 
+        // --- Auto-register the Linear Dark color palette (first install only) ---
+        // Served by __init__.py from linear_dark.json (single source). We add it
+        // to Comfy.CustomColorPalettes and activate it ONCE; if the user later
+        // picks another palette we never override their choice again.
+        try {
+            const s = comfyApp.extensionManager?.setting;
+            if (s) {
+                const existing = s.get("Comfy.CustomColorPalettes") ?? {};
+                if (!existing.linear_dark) {
+                    const resp = await fetch("/linear-theme/palette");
+                    if (resp.ok) {
+                        const palette = await resp.json();
+                        if (palette?.id === "linear_dark") {
+                            await s.set("Comfy.CustomColorPalettes", { ...existing, linear_dark: palette });
+                            await s.set("Comfy.ColorPalette", "linear_dark");
+                            console.log("[LinearTheme] Linear Dark palette registered and set as default");
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            console.warn("[LinearTheme] Could not auto-register palette:", e);
+        }
+
         console.log("[LinearTheme] Theme applied — v2.0");
     },
 

@@ -53,8 +53,8 @@ git clone https://github.com/Arroz-11/ComfyUI-Linear-Theme.git
 
 Restart ComfyUI after installing.
 
-### Optional: canvas color palette
-Import `linear_dark.json` in **Settings → Appearance → Color Theme → Import** for the full LiteGraph canvas palette (slot colors, link colors, node body, etc.).
+### Canvas color palette
+The **Linear Dark** palette (slot colors, link colors, node body, etc.) registers and activates automatically on first launch. If you switch to another palette later, the theme respects your choice — re-select **Linear Dark** in **Settings → Appearance → Color Theme** anytime, or import `linear_dark.json` manually.
 
 ## License
 
