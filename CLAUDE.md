@@ -6,7 +6,7 @@
 - CSS is a template literal string injected as a `<style>` element
 - LiteGraph canvas properties set programmatically in JS
 - Sync target: `<your-comfyui-path>/custom_nodes/comfyui-linear-theme/js/linear_theme.js`
-- Version: 2.0.2
+- Version: 2.0.3
 
 ## KNOWN BUGS — DO NOT RE-INTRODUCE
 

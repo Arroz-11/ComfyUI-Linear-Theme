@@ -436,7 +436,10 @@ input::placeholder, textarea::placeholder { color: var(--input-placeholder) !imp
 .graph-canvas-container { background: var(--bg-color, #0d0d0d) !important; }
 .side-bar-panel, .bottom-panel, .p-drawer, .p-sidebar { contain: layout style paint !important; }
 .actionbar-container { contain: none !important; }
-canvas { will-change: transform !important; }
+/* Scoped to the graph canvas ONLY. A global \`canvas\` rule forced will-change
+   on the mask editor's offscreen-rendered overlay canvas, which composites as
+   solid black in Chromium (mask editor showed no image — GitHub issue #2). */
+#graph-canvas, .graph-canvas-container > canvas { will-change: transform !important; }
 .graph-canvas-container * { -webkit-font-smoothing: antialiased !important; }
 
 /* Graph button / secondary backgrounds */
@@ -532,7 +535,10 @@ hr, .p-divider { border-color: #242429 !important; }
 .comfy-markdown code { background: rgba(244,244,245,0.06) !important; border: 1px solid var(--linear-border) !important; border-radius: 4px !important; color: #a1a1aa !important; padding: 2px 5px !important; font-size: 12px !important; }
 .comfy-markdown pre { background: var(--linear-surface-elevated) !important; border: 1px solid var(--linear-border) !important; border-radius: 8px !important; padding: 14px !important; }
 .model_preview_top_container { background: var(--linear-surface) !important; border: 1px solid var(--linear-border) !important; border-radius: 10px !important; }
-.maskEditor-ui-container { background: var(--linear-surface) !important; color: var(--linear-text-primary) !important; }
+/* NO background here: this container stacks ABOVE the mask editor's canvas
+   layers (z-index 1 vs 0), so an opaque bg hides the image entirely
+   (GitHub issue #2 "mask editor shows no image"). Color only. */
+.maskEditor-ui-container { color: var(--linear-text-primary) !important; }
 .graph-canvas-container { background: var(--bg-color, #0d0d0d) !important; }
 .comfyui-body-top, .comfyui-body-bottom, .comfyui-body-left, .comfyui-body-right { background: transparent !important; }
 .selection-toolbox { background: #111113 !important; border: 1px solid var(--linear-border) !important; border-radius: 10px !important; }
@@ -1668,9 +1674,7 @@ class ThemeEditor {
             canvas.use_gradients = !c.fpsBoost;
             canvas.render_collapsed_slots = !c.fpsBoost;
             canvas.always_render_background = !c.fpsBoost;
-            if (c.fpsBoost) {
-                canvas.links_render_mode = 0; // straight lines
-            }
+            // links_render_mode intentionally untouched (user setting wins).
         }
     }
 
@@ -2137,9 +2141,13 @@ function installGroupOverride() {
             const x = pos[0], y = pos[1], w = size[0], h = size[1];
             const r = 8;
 
-            // ── Border only — 1px thin ──
+            // ── Subtle color fill + 1px border ──
+            // The fill keeps the user's chosen color visible (GitHub issue #1
+            // "group color not working") without leaving the minimal look.
             ctx.beginPath();
             ctx.roundRect(x, y, w, h, r);
+            ctx.fillStyle = `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0.07)`;
+            ctx.fill();
             ctx.strokeStyle = `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0.35)`;
             ctx.lineWidth = 1;
             ctx.stroke();
@@ -2202,7 +2210,8 @@ comfyApp.registerExtension({
             canvas.render_collapsed_slots = false;
             canvas.use_gradients = false;
             canvas.always_render_background = false;
-            canvas.links_render_mode = 0; // straight lines (fastest)
+            // links_render_mode is NOT forced here — the user's own
+            // Comfy.LinkRenderMode setting stays in control (GitHub issue #1).
 
             /* ═══════════════════════════════════════════════════════
                FPS Boost — Runtime rendering optimizations
