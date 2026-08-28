@@ -10,7 +10,7 @@ const comfyApp = app || window.comfyAPI?.app?.app;
  */
 
 // Keep in sync with pyproject.toml version (both are bumped on release)
-const LINEAR_THEME_VERSION = "2.0.3";
+const LINEAR_THEME_VERSION = "2.0.4";
 
 const THEME = {
     CLEAR_BACKGROUND_COLOR: "#0d0d0d",
