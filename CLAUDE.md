@@ -81,6 +81,26 @@ When the actionbar (Run button area) is undocked/floated, it becomes invisible b
 - Use JS MutationObserver to force `background: #131313` on the actionbar when Tailwind classes change
 - Use `setInterval` for hover fix on top bar buttons (MutationObserver on `document.body` is too expensive for FPS)
 
+### Bug #5: Mask Editor Image Invisible (CRITICAL — GitHub issue #2)
+
+**Problem:**
+The mask editor stacks 4 canvas layers (image z-0, mask z-10, rollback z-30, overlay z-40) inside `#maskEditorCanvasContainer`. The sibling `.maskEditor-ui-container` (toolbar/panels layer) has `z-index: 1` and stacks ABOVE those canvases. Giving it ANY opaque `background` paints over the image — the editor looks solid black while the canvas backing stores are perfectly fine (getImageData returns the image).
+
+**Solution (DO NOT RE-INTRODUCE):**
+NEVER set `background` on `.maskEditor-ui-container`. Style only `color` there; its child panels bring their own dark backgrounds.
+
+**Related hardening:** `will-change: transform` must stay scoped to the graph canvas (`#graph-canvas`). A global `canvas { will-change }` rule forces compositing layers on foreign canvases (the mask editor overlay is offscreen-rendered via `transferControlToOffscreen`) and risks black-canvas compositing bugs in Chromium.
+
+### Bug #6: Group Colors Invisible / Links Forced Straight (GitHub issue #1)
+
+**Problem:**
+1. The custom `drawGroups` override drew only a 1px border at 35% alpha + dot + title — the user's chosen group color was effectively invisible ("group color not working").
+2. Setup and FPS Boost forced `canvas.links_render_mode = 0` (straight), silently overriding the user's `Comfy.LinkRenderMode` setting.
+
+**Solution:**
+- Groups get a subtle fill of the accent color at 7% alpha (plus the existing border/dot/title).
+- NEVER set `links_render_mode` from the theme — the user's ComfyUI setting stays in control.
+
 ## Key CSS Variables for Context Menu (native ComfyUI)
 - `--border-default` → separator lines (we define as `#27272a`)
 - `--content-hover-fg` → hover text (we define as `#ffffff`)
