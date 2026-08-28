@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-linear-theme"
 description = "Dark minimal theme for ComfyUI inspired by Linear, Vercel, and Raycast. Pure black aesthetic, zinc scale, and ghost/outline buttons."
-version = "2.0.4"
+version = "2.0.5"
 license = { file = "LICENSE" }
 
 [project.urls]
@@ -10,3 +10,4 @@ Repository = "https://github.com/Arroz-11/ComfyUI-Linear-Theme"
 [tool.comfy]
 PublisherId = "agunode"
 DisplayName = "Linear Theme"
+Banner = "https://raw.githubusercontent.com/Arroz-11/ComfyUI-Linear-Theme/master/assets/banner.png"
