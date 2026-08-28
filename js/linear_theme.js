@@ -4,10 +4,13 @@ import { api } from "../../scripts/api.js";
 const comfyApp = app || window.comfyAPI?.app?.app;
 
 /*
- * Premium Dark Theme v3 for ComfyUI
+ * ComfyUI Linear Theme
  * Comprehensive overhaul — ~200 CSS variables, exhaustive selectors.
  * Aesthetic: Ultra-clean monochrome dark, zinc scale, creative tool feel.
  */
+
+// Keep in sync with pyproject.toml version (both are bumped on release)
+const LINEAR_THEME_VERSION = "2.0.3";
 
 const THEME = {
     CLEAR_BACKGROUND_COLOR: "#0d0d0d",
@@ -55,6 +58,16 @@ const THEME = {
 /* ═══════════════════════════════════════════════════════════════════
    CSS — Variables + Selectors + Animations
    ═══════════════════════════════════════════════════════════════════ */
+
+// Injected at module load, decoupled from the extension API: the font-forcing
+// rules (CLAUDE.md Bug #1) must survive even if registerExtension changes or fails.
+function injectLinearThemeCSS() {
+    document.getElementById("linear-theme-css")?.remove();
+    const style = document.createElement("style");
+    style.id = "linear-theme-css";
+    style.textContent = CSS;
+    document.head.appendChild(style);
+}
 
 const CSS = `
 /* ============================================
@@ -1016,6 +1029,9 @@ fieldset.cm-experimental, [class*="experimental"] { border: none !important; bac
 /* Highlighted/selected option in any dropdown — white not blue */
 ::highlight, ::selection { background: rgba(244,244,245,0.15) !important; color: #ffffff !important; }
 `;
+
+// CSS-only protection active from this point, extension API or not
+injectLinearThemeCSS();
 
 /* ═══════════════════════════════════════════════════════════════════
    Extension Registration
@@ -2088,6 +2104,9 @@ function lockCollapsedWidth(node) {
 }
 
 // ── Group color palette (muted zinc tones) ──
+const GROUP_FILL_ALPHA = 0.07;   // subtle tint that keeps the chosen color visible
+const GROUP_BORDER_ALPHA = 0.35;
+
 const LINEAR_GROUP_COLORS = {
     '#335':    { bg: '#2a2a2e', accent: '#a1a1aa' },   // default (no color) → zinc
     '#8AA':    { bg: '#2d4a4a', accent: '#2dd4bf' },   // teal/cyan
@@ -2146,9 +2165,9 @@ function installGroupOverride() {
             // "group color not working") without leaving the minimal look.
             ctx.beginPath();
             ctx.roundRect(x, y, w, h, r);
-            ctx.fillStyle = `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0.07)`;
+            ctx.fillStyle = `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, ${GROUP_FILL_ALPHA})`;
             ctx.fill();
-            ctx.strokeStyle = `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0.35)`;
+            ctx.strokeStyle = `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, ${GROUP_BORDER_ALPHA})`;
             ctx.lineWidth = 1;
             ctx.stroke();
 
@@ -2175,7 +2194,7 @@ function installGroupOverride() {
     };
 }
 
-comfyApp.registerExtension({
+const LINEAR_THEME_EXTENSION = {
     name: "Comfy.LinearTheme",
     nodeCreated(node) {
         stripNodeColor(node);
@@ -2188,14 +2207,9 @@ comfyApp.registerExtension({
         lockCollapsedWidth(node);
     },
     async setup() {
-        // Inject CSS
-        const existing = document.getElementById("linear-theme-css");
-        if (existing) existing.remove();
-
-        const style = document.createElement("style");
-        style.id = "linear-theme-css";
-        style.textContent = CSS;
-        document.head.appendChild(style);
+        // Re-inject CSS so our <style> is last in <head> (wins specificity ties
+        // against custom node styles loaded after module import)
+        injectLinearThemeCSS();
 
         // Apply LiteGraph canvas theme
         const canvas = comfyApp.canvas;
@@ -2810,7 +2824,7 @@ comfyApp.registerExtension({
             console.warn("[LinearTheme] Could not auto-register palette:", e);
         }
 
-        console.log("[LinearTheme] Theme applied — v2.0");
+        console.log(`[LinearTheme] Theme applied — v${LINEAR_THEME_VERSION}`);
     },
 
     beforeRegisterNodeDef(nodeType, nodeData) {
@@ -2991,4 +3005,11 @@ comfyApp.registerExtension({
             }
         };
     }
-});
+};
+
+if (comfyApp?.registerExtension) {
+    comfyApp.registerExtension(LINEAR_THEME_EXTENSION);
+} else {
+    // CSS is already injected above — fonts and UI styling still apply
+    console.warn("[LinearTheme] registerExtension unavailable — running in CSS-only mode");
+}

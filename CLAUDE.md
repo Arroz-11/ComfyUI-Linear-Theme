@@ -6,7 +6,7 @@
 - CSS is a template literal string injected as a `<style>` element
 - LiteGraph canvas properties set programmatically in JS
 - Sync target: `<your-comfyui-path>/custom_nodes/comfyui-linear-theme/js/linear_theme.js`
-- Version: 2.0.3
+- Version: source of truth is `pyproject.toml`; mirror it in `LINEAR_THEME_VERSION` (top of `js/linear_theme.js`) on every release bump. A push to master that changes the pyproject version auto-publishes to the Comfy Registry via GitHub Action.
 
 ## KNOWN BUGS — DO NOT RE-INTRODUCE
 
