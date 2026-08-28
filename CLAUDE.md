@@ -126,6 +126,9 @@ These Tailwind classes compile to static values and CANNOT be overridden via CSS
 - Text secondary: `#a1a1aa`
 - Text muted: `#71717a`
 
+## Known Pending
+- Dedupe the 8 CSS selectors defined twice (`.p-tooltip`, `.side-bar-panel`, `.manager-dialog`, `.p-slider`, `.p-panel`, `.p-badge`, `.litesearchbox`, `.workflow-tab`). Same values today, so harmless — do it with per-rule visual verification.
+
 ## Design Direction
 - Premium dark theme — unique identity, not a copy of any specific app
 - No glassmorphism (removed for FPS)
