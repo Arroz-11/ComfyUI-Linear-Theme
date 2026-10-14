@@ -446,7 +446,6 @@ input::placeholder, textarea::placeholder { color: var(--input-placeholder) !imp
 .graph-canvas-panel .p-buttongroup [class*="separator"],
 .graph-canvas-panel .p-buttongroup [class*="divider"] { background: #1e1e22 !important; }
 .bottom-panel { background: #1a1a1a !important; border-top: 1px solid var(--linear-border) !important; }
-.graph-canvas-container { background: var(--bg-color, #0d0d0d) !important; }
 .side-bar-panel, .bottom-panel, .p-drawer, .p-sidebar { contain: layout style paint !important; }
 .actionbar-container { contain: none !important; }
 /* Scoped to the graph canvas ONLY. A global \`canvas\` rule forced will-change
@@ -564,7 +563,6 @@ hr, .p-divider { border-color: #242429 !important; }
 .p-slider .p-slider-range { background: #a1a1aa !important; }
 .p-slider .p-slider-handle { background: #e4e4e7 !important; border: 2px solid #e4e4e7 !important; width: 14px !important; height: 14px !important; border-radius: 50% !important; font-size: 0 !important; line-height: 0 !important; text-indent: -9999px !important; overflow: hidden !important; cursor: pointer !important; }
 .p-slider .p-slider-handle:hover { transform: scale(1.15) !important; }
-.p-slider .p-slider-handle::before, .p-slider .p-slider-handle::after { display: none !important; }
 
 /* ── Accordion ── */
 .p-accordion-header { background: transparent !important; border: none !important; border-bottom: 1px solid var(--linear-border) !important; color: var(--linear-text-primary) !important; }
@@ -1037,10 +1035,7 @@ injectLinearThemeCSS();
    Extension Registration
    ═══════════════════════════════════════════════════════════════════ */
 
-function stripNodeColor(node) {
-    delete node.color;
-    delete node.bgcolor;
-}
+// Workflow colors belong to the workflow; the theme only changes defaults.
 
 // Ensure node is wide enough to show full title without truncation
 
@@ -1214,13 +1209,6 @@ function arrangeSelectedNodes(selectedNodes) {
         curX = snap(curX + maxW + H_GAP);
     }
 
-    // --- DEBUG: log main path and columns ---
-    console.log(`[Arrange] mainY: ${mainY}`);
-    console.log(`[Arrange] Main path:`, [...mainPathIds].map(id => nodeById[id]?.title || nodeById[id]?.type || id));
-    for (const d of depths) {
-        console.log(`[Arrange] Col ${d}:`, columns[d].map(n => `${n.title || n.type} (${mainPathIds.has(n.id) ? 'MAIN' : 'sub'})`));
-    }
-
     // --- 6. Place ALL nodes per column, sorted by target slot (slot 0 = top) ---
     for (const d of depths) {
         const col = columns[d];
@@ -1266,98 +1254,77 @@ const executionState = {
    ═══════════════════════════════════════════════════════════════════ */
 
 const THEME_EDITOR_CSS = `
-.te-panel {
-    position: fixed; top: 60px; right: 20px; width: 280px;
-    max-height: calc(100vh - 80px); overflow-y: auto;
-    background: #131313;
-    border: none; border-radius: 12px;
-    z-index: 99999; font-family: Inter, system-ui, sans-serif;
-    font-size: 12px; color: #a1a1aa;
-    box-shadow: none;
-    display: none;
-}
+.te-panel { position: fixed; top: 60px; right: 20px; width: 320px; max-height: min(720px, calc(100vh - 80px)); overflow-y: auto; background: #131313; border: none; border-radius: 12px; z-index: 99999; font-family: Inter, system-ui, sans-serif; font-size: 12px; color: #a1a1aa; box-shadow: none; display: none; max-width: calc(100vw - 16px); box-sizing: border-box; color-scheme: dark; --te-text: #e4e4e7; --te-secondary: #a1a1aa; --te-border: #27272a; }
 .te-panel.open { display: block; }
 .te-panel * { box-sizing: border-box; }
-.te-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 12px; cursor: grab; user-select: none;
-    border-bottom: 1px solid #1e1e22;
-}
+.te-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; cursor: grab; user-select: none; border-bottom: 1px solid #1e1e22; position: sticky; top: 0; z-index: 1; background: #111113; gap: 8px; }
 .te-header:active { cursor: grabbing; }
-.te-title { font-weight: 600; color: #e4e4e7; font-size: 13px; }
-.te-header-btns { display: flex; gap: 6px; }
-.te-btn {
-    background: none; border: none; color: #71717a; cursor: pointer;
-    font-size: 14px; padding: 2px 4px; border-radius: 4px; line-height: 1;
-}
+.te-title { font-weight: 600; color: #e4e4e7; font-size: 13px; flex: 1; }
+.te-header-btns { display: flex; gap: 4px; }
+.te-btn { background: none; border: none; color: var(--te-secondary); cursor: pointer; font-size: 14px; padding: 3px; border-radius: 4px; line-height: 1; min-width: 24px; min-height: 24px; display: inline-flex; align-items: center; justify-content: center; }
 .te-btn:hover { color: #f4f4f5; background: rgba(244,244,245,0.06); }
 .te-section { border-bottom: 1px solid #1a1a1a; }
 .te-section:last-child { border-bottom: none; }
-.te-section-header {
-    display: flex; align-items: center; padding: 8px 12px;
-    cursor: pointer; user-select: none; font-weight: 600;
-    font-size: 11px; letter-spacing: 0.06em; color: #e4e4e7;
-    text-transform: uppercase;
-}
+.te-section-header { display: flex; align-items: center; padding: 9px 12px; cursor: pointer; user-select: none; font-weight: 600; font-size: 11px; letter-spacing: .03em; color: #e4e4e7; text-transform: uppercase; }
 .te-section-header:hover { color: #ffffff; }
 .te-arrow { margin-right: 6px; font-size: 8px; display: inline-block; }
 .te-section.open .te-arrow { transform: rotate(90deg); }
 .te-section-body { display: none; padding: 4px 12px 10px; }
 .te-section.open .te-section-body { display: block; }
-.te-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 4px 0; gap: 8px;
-}
-.te-label { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11px; color: #a1a1aa; }
-.te-color {
-    -webkit-appearance: none; appearance: none;
-    width: 28px; height: 20px; border: none; border-radius: 6px;
-    cursor: pointer; background: none; padding: 0;
-}
+.te-row { display: flex; align-items: center; justify-content: space-between; padding: 2px 0; gap: 8px; min-height: 28px; }
+.te-label { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; color: #a1a1aa; min-width: 0; line-height: 1.35; }
+.te-color { -webkit-appearance: none; appearance: none; width: 28px; height: 24px; border: none; border-radius: 6px; cursor: pointer; background: none; padding: 0; }
 .te-color::-webkit-color-swatch-wrapper { padding: 0; }
 .te-color::-webkit-color-swatch { border: none; border-radius: 3px; }
 .te-color::-moz-color-swatch { border: none; border-radius: 3px; }
-.te-range {
-    width: 90px; height: 4px; -webkit-appearance: none; appearance: none;
-    background: #27272a; border-radius: 2px; outline: none; cursor: pointer;
-}
-.te-range::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 12px; height: 12px;
-    background: #f4f4f5; border-radius: 50%; cursor: pointer;
-}
-.te-range::-moz-range-thumb {
-    width: 12px; height: 12px; background: #f4f4f5;
-    border-radius: 50%; cursor: pointer; border: none;
-}
-.te-range-val { width: 32px; text-align: right; font-size: 10px; color: #a1a1aa; font-variant-numeric: tabular-nums; }
-.te-field-reset {
-    font-size: 11px; padding: 1px 3px; opacity: 0; pointer-events: none; flex-shrink: 0;
-}
+.te-range { width: 88px; height: 24px; -webkit-appearance: none; appearance: none; background: transparent; border-radius: 2px; outline: none; cursor: pointer; flex-shrink: 0; }
+.te-range::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: #f4f4f5; border-radius: 50%; cursor: pointer; margin-top: -4px; }
+.te-range::-moz-range-thumb { width: 12px; height: 12px; background: #f4f4f5; border-radius: 50%; cursor: pointer; border: none; }
+.te-range-val { width: 32px; text-align: right; font-size: 11px; color: #a1a1aa; font-variant-numeric: tabular-nums; }
+.te-field-reset { font-size: 11px; padding: 1px 3px; opacity: 0; pointer-events: none; flex-shrink: 0; flex: 0 0 24px; }
 .te-row.modified .te-field-reset { opacity: 1; pointer-events: auto; }
 .te-presets { border-bottom: 1px solid #1a1a1a; padding: 8px 12px; }
 .te-presets-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
 .te-presets-bar span { font-weight: 600; font-size: 11px; letter-spacing: 0.06em; color: #e4e4e7; text-transform: uppercase; }
-.te-preset-save {
-    font-size: 11px; padding: 4px 10px; border-radius: 6px;
-    background: #1a1a1a; border: none;
-    color: #e4e4e7; cursor: pointer;
-}
+.te-preset-save { font-size: 11px; padding: 3px 8px; border-radius: 6px; background: #1a1a1a; border: none; color: #e4e4e7; cursor: pointer; min-height: 24px; }
 .te-preset-save:hover { color: #ffffff; background: #222226; }
 .te-preset-list { display: flex; flex-direction: column; gap: 2px; }
-.te-preset-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 4px 6px; border-radius: 4px; cursor: pointer;
-    font-size: 11px; color: #a1a1aa;
-}
+.te-preset-item { display: flex; align-items: center; justify-content: space-between; padding: 4px 6px; border-radius: 4px; cursor: pointer; font-size: 11px; color: #a1a1aa; }
 .te-preset-item:hover { background: rgba(244,244,245,0.06); color: #f4f4f5; }
-.te-preset-item-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.te-preset-item-btns { display: flex; gap: 2px; opacity: 0; }
-.te-preset-item:hover .te-preset-item-btns { opacity: 1; }
-.te-preset-del { font-size: 10px; padding: 1px 3px; }
-.te-preset-empty { font-size: 11px; color: #48484f; padding: 4px 0; }
+.te-preset-item-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border: none; background: transparent; text-align: left; cursor: pointer; padding: 3px 0; color: inherit; font-size: 11px; }
+.te-preset-del { font-size: 10px; padding: 1px 3px; opacity: 0; }
+.te-preset-empty { font-size: 12px; color: var(--te-secondary); padding: 4px 0; }
 .te-panel::-webkit-scrollbar { width: 4px; }
 .te-panel::-webkit-scrollbar-track { background: transparent; }
 .te-panel::-webkit-scrollbar-thumb { background: #27272a; border-radius: 2px; }
+.te-save-status { font-size: 10px; color: #a1a1aa; }
+.te-save-status.error { color: #f87171; }
+.te-panel input, .te-panel button, .te-preset-item-name { font-family: 'Inter', Arial, sans-serif !important; }
+.te-panel input[type="checkbox"] { accent-color: #a1a1aa; width: 14px; height: 14px; }
+.te-panel button { box-shadow: none; }
+.te-preset-item:hover .te-preset-del, .te-preset-item:focus-within .te-preset-del { opacity: 1; }
+.te-panel :is(button, input, [role="button"]):focus-visible { outline: 2px solid #a1a1aa !important; outline-offset: 2px; scroll-margin-top: 52px; scroll-margin-bottom: 8px; }
+.actionbar-container button:hover, .actionbar button:hover { background-color: rgba(244,244,245,0.08) !important; }
+input:not([type]), button:not([class*="icon"]), select { font-family: 'Inter', Arial, sans-serif !important; }
+.lg-node { --radius-xl: var(--linear-node-radius, 11px); filter: var(--linear-node-shadow, none) !important; }
+.lg-node [data-testid="node-title"] { color: var(--linear-node-title-text, #ffffff); }
+.lg-node textarea, .lg-node input:not([type="checkbox"]):not([type="range"]), textarea.comfy-multiline-input { background: var(--linear-node-widget-bg, #1a1a1a) !important; }
+.te-range::-webkit-slider-runnable-track { height: 4px; background: #27272a; border-radius: 2px; }
+.te-range::-moz-range-track { height: 4px; background: #27272a; border-radius: 2px; }
+.comfyui-button.primary:not(:disabled) { color: var(--linear-text-secondary, #a1a1aa) !important; }
+.comfyui-button.primary:not(:disabled):hover { color: var(--linear-text-primary, #e4e4e7) !important; }
+.te-section-header { width: 100%; border: none; border-radius: 0; background: transparent; text-align: left; font-family: inherit; }
+.te-field-reset:disabled { opacity: 0; pointer-events: none; }
+.te-row:focus-within .te-field-reset:not(:disabled) { opacity: 1; pointer-events: auto; }
+.te-preset-form { display: grid; grid-template-columns: 1fr auto auto; gap: 6px; margin: 6px 0 8px; }
+.te-preset-form[hidden], .te-save-retry[hidden] { display: none; }
+.te-preset-form label { grid-column: 1 / -1; font-size: 12px; color: #a1a1aa; }
+.te-preset-form input { min-width: 0; width: 100%; height: 28px; padding: 4px 6px; font-size: 12px !important; }
+.te-preset-form button, .te-save-retry { min-height: 24px; border: none; background: #1a1a1a; color: #e4e4e7; border-radius: 5px; padding: 3px 6px; cursor: pointer; font-size: 11px; }
+@media (prefers-reduced-motion: reduce) {
+    .te-panel *, .lg-node * { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
+
 `;
 
 const THEME_DEFAULTS = {
@@ -1448,7 +1415,7 @@ const SECTION_DEFS = [
             { key: "nodeBorderRadius", label: "Node Radius", type: "range", min: 0, max: 20, step: 1 },
             { key: "connectionWidth", label: "Connection Width", type: "range", min: 1, max: 6, step: 0.5 },
             { key: "linkColor", label: "Link Color", type: "color" },
-            { key: "groupColor", label: "Group Color", type: "color" },
+            { key: "groupColor", label: "Default Group Tint", type: "color" },
             { key: "fpsBoost", label: "FPS Boost", type: "checkbox" },
             { key: "snapGuides", label: "Snap Guides", type: "checkbox" },
         ],
@@ -1486,12 +1453,33 @@ const SECTION_DEFS = [
     },
 ];
 
+function normalizeThemeConfig(saved) {
+    const config = JSON.parse(JSON.stringify(THEME_DEFAULTS));
+    for (const section of SECTION_DEFS) {
+        for (const field of section.fields) {
+            const value = saved?.[section.key]?.[field.key];
+            if (field.type === "color" && typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value)) {
+                config[section.key][field.key] = value;
+            } else if (field.type === "checkbox" && typeof value === "boolean") {
+                config[section.key][field.key] = value;
+            } else if (field.type === "range" && typeof value === "number" && Number.isFinite(value)) {
+                config[section.key][field.key] = Math.min(field.max, Math.max(field.min, value));
+            }
+        }
+    }
+    return config;
+}
+
 class ThemeEditor {
     constructor() {
         this.config = JSON.parse(JSON.stringify(THEME_DEFAULTS));
         this.panel = null;
         this._styleEl = null;
-        this._rangeDebounce = null;
+        this._pendingSections = new Set();
+        this._applyFrame = null;
+        this._returnFocus = null;
+        this._pendingSave = null;
+        this._savePromise = null;
     }
 
     async init() {
@@ -1499,7 +1487,7 @@ class ThemeEditor {
         this._createPanel();
         await this._loadConfig();
         this._syncInputsToConfig();
-        this.applyConfig();
+        this.applyConfig(false);
         this._renderPresets();
     }
 
@@ -1516,6 +1504,8 @@ class ThemeEditor {
         panel.innerHTML = `
             <div class="te-header">
                 <span class="te-title">Theme Editor</span>
+                <span class="te-save-status" role="status" aria-live="polite"></span>
+                <button type="button" class="te-save-retry" hidden>Retry</button>
                 <div class="te-header-btns">
                     <button class="te-btn te-reset" title="Reset to defaults">↺</button>
                     <button class="te-btn te-close" title="Close">✕</button>
@@ -1534,14 +1524,43 @@ class ThemeEditor {
                 <span>Presets</span>
                 <button class="te-preset-save">Save</button>
             </div>
+            <form class="te-preset-form" hidden>
+                <label for="te-preset-name">Preset name</label>
+                <input id="te-preset-name" type="text" autocomplete="off" required>
+                <button type="submit">Save</button>
+                <button type="button" class="te-preset-cancel">Cancel</button>
+            </form>
             <div class="te-preset-list"></div>
         `;
         body.appendChild(presetsDiv);
         this._presetListEl = presetsDiv.querySelector(".te-preset-list");
 
-        presetsDiv.querySelector(".te-preset-save").addEventListener("click", () => {
-            const name = prompt("Preset name:");
-            if (name && name.trim()) this._savePreset(name.trim());
+        const presetForm = presetsDiv.querySelector(".te-preset-form");
+        const presetName = presetForm.querySelector("input");
+        const savePresetButton = presetsDiv.querySelector(".te-preset-save");
+        const closePresetForm = () => {
+            presetForm.hidden = true;
+            presetName.value = "";
+            savePresetButton.focus({ preventScroll: true });
+        };
+        savePresetButton.addEventListener("click", () => {
+            presetForm.hidden = false;
+            presetName.focus({ preventScroll: true });
+        });
+        presetForm.addEventListener("submit", e => {
+            e.preventDefault();
+            const name = presetName.value.trim();
+            if (!name) { presetName.focus(); return; }
+            this._savePreset(name);
+            closePresetForm();
+        });
+        presetForm.querySelector(".te-preset-cancel").addEventListener("click", closePresetForm);
+        presetForm.addEventListener("keydown", e => {
+            if (e.key === "Escape") {
+                e.preventDefault();
+                e.stopPropagation();
+                closePresetForm();
+            }
         });
 
         const savedSections = this._loadSections();
@@ -1551,30 +1570,28 @@ class ThemeEditor {
             section.className = "te-section" + (savedSections[sec.key] ? " open" : "");
             section.dataset.section = sec.key;
 
-            const resetBtn = `<button class="te-btn te-field-reset" data-section="\${sec}" data-key="\${key}" title="Reset to default">↺</button>`;
-
             let fieldsHtml = "";
             for (const f of sec.fields) {
                 const val = this.config[sec.key][f.key];
-                const rb = `<button class="te-btn te-field-reset" data-section="${sec.key}" data-key="${f.key}" title="Reset to default">↺</button>`;
+                const rb = `<button class="te-btn te-field-reset" data-section="${sec.key}" data-key="${f.key}" title="Reset ${f.label}" aria-label="Reset ${f.label}">↺</button>`;
                 if (f.type === "color") {
                     fieldsHtml += `<div class="te-row">
-                        <span class="te-label">${f.label}</span>
-                        <input type="color" class="te-color" data-section="${sec.key}" data-key="${f.key}" value="${val}">
+                        <label class="te-label" for="te-${sec.key}-${f.key}" title="${f.label}">${f.label}</label>
+                        <input type="color" class="te-color" data-section="${sec.key}" data-key="${f.key}" id="te-${sec.key}-${f.key}" aria-label="${f.label}" value="${val}">
                         ${rb}
                     </div>`;
                 } else if (f.type === "range") {
                     fieldsHtml += `<div class="te-row">
-                        <span class="te-label">${f.label}</span>
-                        <input type="range" class="te-range" data-section="${sec.key}" data-key="${f.key}"
+                        <label class="te-label" for="te-${sec.key}-${f.key}" title="${f.label}">${f.label}</label>
+                        <input type="range" class="te-range" data-section="${sec.key}" data-key="${f.key}" id="te-${sec.key}-${f.key}" aria-label="${f.label}"
                             min="${f.min}" max="${f.max}" step="${f.step}" value="${val}">
                         <span class="te-range-val">${val}</span>
                         ${rb}
                     </div>`;
                 } else if (f.type === "checkbox") {
                     fieldsHtml += `<div class="te-row">
-                        <span class="te-label">${f.label}</span>
-                        <input type="checkbox" data-section="${sec.key}" data-key="${f.key}"
+                        <label class="te-label" for="te-${sec.key}-${f.key}" title="${f.label}">${f.label}</label>
+                        <input type="checkbox" data-section="${sec.key}" data-key="${f.key}" id="te-${sec.key}-${f.key}" aria-label="${f.label}"
                             ${val ? "checked" : ""} style="cursor:pointer;">
                         ${rb}
                     </div>`;
@@ -1582,8 +1599,8 @@ class ThemeEditor {
             }
 
             section.innerHTML = `
-                <div class="te-section-header"><span class="te-arrow">▶</span>${sec.label}</div>
-                <div class="te-section-body">${fieldsHtml}</div>
+                <button type="button" class="te-section-header" aria-expanded="${!!savedSections[sec.key]}" aria-controls="te-section-${sec.key}"><span class="te-arrow" aria-hidden="true">▶</span>${sec.label}</button>
+                <div class="te-section-body" id="te-section-${sec.key}">${fieldsHtml}</div>
             `;
             body.appendChild(section);
         }
@@ -1595,6 +1612,7 @@ class ThemeEditor {
 
         panel.querySelector(".te-close").addEventListener("click", () => this.toggle(false));
         panel.querySelector(".te-reset").addEventListener("click", () => this.resetConfig());
+        panel.querySelector(".te-save-retry").addEventListener("click", () => this.saveConfig());
 
         // Per-field reset buttons
         panel.addEventListener("click", (e) => {
@@ -1610,13 +1628,19 @@ class ThemeEditor {
         });
 
         panel.querySelectorAll(".te-section-header").forEach(header => {
-            header.addEventListener("click", () => {
-                header.parentElement.classList.toggle("open");
+            const toggleSection = () => {
+                const open = header.parentElement.classList.toggle("open");
+                header.setAttribute("aria-expanded", String(open));
                 this._saveSections();
-            });
+            };
+            header.addEventListener("click", toggleSection);
+
         });
 
         panel.addEventListener("input", (e) => this._onInputChange(e));
+        panel.addEventListener("keydown", e => {
+            if (e.key === "Escape") this.toggle(false);
+        });
         this._setupDrag(panel);
 
         const pos = this._loadPosition();
@@ -1628,22 +1652,49 @@ class ThemeEditor {
 
         document.body.appendChild(panel);
         this.panel = panel;
+        window.addEventListener("resize", () => this._clampPosition());
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) this._flushSections();
+        });
     }
 
     toggle(force) {
         if (!this.panel) return;
         const show = force !== undefined ? force : !this.panel.classList.contains("open");
+        const wasOpen = this.panel.classList.contains("open");
+        if (show && !wasOpen) this._returnFocus = document.activeElement;
         this.panel.classList.toggle("open", show);
+        if (show) {
+            this._clampPosition();
+            if (!wasOpen) this.panel.querySelector(".te-close").focus({ preventScroll: true });
+        } else if (wasOpen) {
+            const target = this._returnFocus?.isConnected && this._returnFocus !== document.body
+                ? this._returnFocus : comfyApp.canvas?.canvas;
+            target?.focus({ preventScroll: true });
+        }
+    }
+
+    _clampPosition() {
+        if (!this.panel?.classList.contains("open")) return;
+        const rect = this.panel.getBoundingClientRect();
+        const x = Math.max(8, Math.min(rect.left, window.innerWidth - rect.width - 8));
+        const y = Math.max(8, Math.min(rect.top, window.innerHeight - rect.height - 8));
+        this.panel.style.left = `${x}px`;
+        this.panel.style.top = `${y}px`;
+        this.panel.style.right = "auto";
     }
 
     // ── Apply functions ──
 
-    applyConfig() {
+    applyConfig(persist = true) {
+        if (this._applyFrame !== null) cancelAnimationFrame(this._applyFrame);
+        this._applyFrame = null;
+        this._pendingSections.clear();
         this.applyCanvas();
         this.applyNodes();
         this.applySlots();
         this.applyUI();
-        this.saveConfig();
+        if (persist) this.saveConfig();
         if (comfyApp.canvas) comfyApp.canvas.setDirty(true, true);
     }
 
@@ -1669,6 +1720,9 @@ class ThemeEditor {
 
         this._buildDotGrid(c.dotGridOpacity);
         canvas.round_radius = c.nodeBorderRadius;
+        document.documentElement.style.setProperty("--linear-node-radius", `${c.nodeBorderRadius}px`);
+        document.documentElement.style.setProperty("--linear-node-shadow", c.fpsBoost || !this.config.nodes.shadowOpacity
+            ? "none" : `drop-shadow(0 2px 4px rgba(0,0,0,${this.config.nodes.shadowOpacity}))`);
         canvas.connections_width = c.connectionWidth;
 
         // Link color
@@ -1676,10 +1730,8 @@ class ThemeEditor {
             LiteGraph.LINK_COLOR = c.linkColor;
         }
 
-        // Group color
-        if (c.groupColor && window.LiteGraph) {
-            LiteGraph.DEFAULT_GROUP_FONT_COLOR = c.groupColor;
-        }
+        // Default group tint is read by the custom group renderer.
+        this._updateIdleRendering?.();
 
         // FPS Boost
         if (c.fpsBoost !== undefined && canvas) {
@@ -1707,21 +1759,26 @@ class ThemeEditor {
         document.documentElement.style.setProperty("--component-node-title-color", n.titleTextColor);
         LiteGraph.WIDGET_BGCOLOR = n.widgetBackground;
         LiteGraph.WIDGET_OUTLINE_COLOR = n.widgetBackground;
+        // Nodes 2.0 renders DOM nodes and reads CSS tokens instead of canvas statics.
+        const root = document.documentElement;
+        root.style.setProperty("--component-node-background", n.bodyColor);
+        root.style.setProperty("--node-component-header-surface", n.titleColor);
+        root.style.setProperty("--component-node-widget-background", n.widgetBackground);
+        root.style.setProperty("--linear-node-widget-bg", n.widgetBackground);
+        root.style.setProperty("--linear-node-title-text", n.titleTextColor);
+        root.style.setProperty("--linear-node-shadow", this.config.canvas.fpsBoost || !n.shadowOpacity
+            ? "none" : `drop-shadow(0 2px 4px rgba(0,0,0,${n.shadowOpacity}))`);
 
-        if (comfyApp.graph?._nodes) {
-            for (const node of comfyApp.graph._nodes) {
-                delete node.color;
-                delete node.bgcolor;
-            }
-        }
+
     }
 
     applySlots() {
         const canvas = comfyApp.canvas;
         if (!canvas) return;
         if (!canvas.default_connection_color_byType) canvas.default_connection_color_byType = {};
-        for (const [type, color] of Object.entries(this.config.slots)) {
+        for (const [type, color] of Object.entries({ ...THEME.SLOT_COLORS, ...this.config.slots })) {
             canvas.default_connection_color_byType[type] = color;
+            document.documentElement.style.setProperty(`--color-datatype-${type}`, color);
         }
     }
 
@@ -1788,11 +1845,7 @@ class ThemeEditor {
             if (resp.ok) {
                 const saved = await resp.json();
                 if (saved && Object.keys(saved).length > 0) {
-                    for (const section of Object.keys(THEME_DEFAULTS)) {
-                        if (saved[section]) {
-                            this.config[section] = { ...THEME_DEFAULTS[section], ...saved[section] };
-                        }
-                    }
+                    this.config = normalizeThemeConfig(saved);
                 }
             }
         } catch (e) {
@@ -1801,15 +1854,47 @@ class ThemeEditor {
     }
 
     saveConfig() {
+        this._pendingSave = JSON.stringify(this.config);
+        if (this._savePromise) return this._savePromise;
+        this._savePromise = this._flushConfigSaves();
+        return this._savePromise;
+    }
+
+    async _flushConfigSaves() {
+        let saved = true;
         try {
-            fetch("/linear-theme/config", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(this.config)
-            });
-        } catch (e) {
-            console.warn("[LinearTheme] Failed to save config:", e);
+            while (this._pendingSave !== null) {
+                const body = this._pendingSave;
+                this._pendingSave = null;
+                this._setSaveStatus("Saving…");
+                try {
+                    const response = await fetch("/linear-theme/config", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body,
+                    });
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    saved = true;
+                    this._setSaveStatus("");
+                } catch (error) {
+                    saved = false;
+                    this._setSaveStatus("Not saved", true);
+                    console.warn("[LinearTheme] Failed to save config:", error);
+                }
+            }
+            return saved;
+        } finally {
+            this._savePromise = null;
         }
+    }
+
+    _setSaveStatus(text, error = false) {
+        const status = this.panel?.querySelector(".te-save-status");
+        if (!status) return;
+        status.textContent = text;
+        status.classList.toggle("error", error);
+        const retry = this.panel.querySelector(".te-save-retry");
+        if (retry) retry.hidden = !error;
     }
 
     resetConfig() {
@@ -1821,7 +1906,8 @@ class ThemeEditor {
     _loadPosition() {
         try {
             const raw = localStorage.getItem("linearTheme.panelPos");
-            return raw ? JSON.parse(raw) : null;
+            const pos = raw ? JSON.parse(raw) : null;
+            return pos && Number.isFinite(pos.x) && Number.isFinite(pos.y) ? pos : null;
         } catch { return null; }
     }
 
@@ -1834,7 +1920,8 @@ class ThemeEditor {
     _loadSections() {
         try {
             const raw = localStorage.getItem("linearTheme.sections");
-            return raw ? JSON.parse(raw) : { canvas: true };
+            const sections = raw ? JSON.parse(raw) : null;
+            return sections && typeof sections === "object" && !Array.isArray(sections) ? sections : { canvas: true };
         } catch { return { canvas: true }; }
     }
 
@@ -1853,41 +1940,44 @@ class ThemeEditor {
 
     _onInputChange(e) {
         const el = e.target;
-        const section = el.dataset.section;
-        const key = el.dataset.key;
+        const { section, key } = el.dataset;
         if (!section || !key) return;
-
-        if (el.type === "color") {
-            this.config[section][key] = el.value;
-            this._applySection(section);
-            this._updateModifiedState();
-        } else if (el.type === "range") {
-            const val = parseFloat(el.value);
-            this.config[section][key] = val;
-            const valSpan = el.parentElement.querySelector(".te-range-val");
-            if (valSpan) valSpan.textContent = val;
-            clearTimeout(this._rangeDebounce);
-            this._rangeDebounce = setTimeout(() => {
-                this._applySection(section);
-                this._updateModifiedState();
-            }, 30);
-            return;
-        } else if (el.type === "checkbox") {
-            this.config[section][key] = el.checked;
-            this._applySection(section);
-            this._updateModifiedState();
+        if (el.type === "checkbox") this.config[section][key] = el.checked;
+        else if (el.type === "range") {
+            this.config[section][key] = Number(el.value);
+            const label = el.parentElement.querySelector(".te-range-val");
+            if (label) label.textContent = el.value;
+        } else if (el.type === "color") this.config[section][key] = el.value;
+        else return;
+        this._updateModifiedState();
+        this._pendingSections.add(section);
+        if (this._applyFrame === null) {
+            this._applyFrame = requestAnimationFrame(() => this._flushSections());
         }
     }
 
-    _applySection(section) {
+    _flushSections() {
+        if (this._applyFrame !== null) cancelAnimationFrame(this._applyFrame);
+        this._applyFrame = null;
+        if (!this._pendingSections.size) return;
+        const sections = [...this._pendingSections];
+        this._pendingSections.clear();
+        for (const section of sections) this._applySection(section, false);
+        this.saveConfig();
+        comfyApp.canvas?.setDirty(true, true);
+    }
+
+    _applySection(section, persist = true) {
         switch (section) {
             case "canvas": this.applyCanvas(); break;
             case "nodes": this.applyNodes(); break;
             case "slots": this.applySlots(); break;
             case "ui": this.applyUI(); break;
         }
-        this.saveConfig();
-        if (comfyApp.canvas) comfyApp.canvas.setDirty(true, true);
+        if (persist) {
+            this.saveConfig();
+            comfyApp.canvas?.setDirty(true, true);
+        }
     }
 
     _syncInputsToConfig() {
@@ -1919,6 +2009,8 @@ class ThemeEditor {
             const def = THEME_DEFAULTS[section]?.[key];
             const isModified = current !== def;
             row.classList.toggle("modified", isModified);
+            const reset = row.querySelector(".te-field-reset");
+            if (reset) reset.disabled = !isModified;
         });
     }
 
@@ -1927,7 +2019,10 @@ class ThemeEditor {
     _getPresets() {
         try {
             const raw = localStorage.getItem("linearTheme.presets");
-            return raw ? JSON.parse(raw) : [];
+            const presets = raw ? JSON.parse(raw) : [];
+            return Array.isArray(presets)
+                ? presets.filter(p => p && typeof p.name === "string" && p.config && typeof p.config === "object" && !Array.isArray(p.config))
+                : [];
         } catch { return []; }
     }
 
@@ -1954,12 +2049,7 @@ class ThemeEditor {
         const presets = this._getPresets();
         const preset = presets.find(p => p.name === name);
         if (!preset) return;
-        // Deep merge with defaults for forward-compat
-        for (const section of Object.keys(THEME_DEFAULTS)) {
-            if (preset.config[section]) {
-                this.config[section] = { ...THEME_DEFAULTS[section], ...preset.config[section] };
-            }
-        }
+        this.config = normalizeThemeConfig(preset.config);
         this.applyConfig();
         this._syncInputsToConfig();
     }
@@ -1977,30 +2067,25 @@ class ThemeEditor {
             this._presetListEl.innerHTML = `<div class="te-preset-empty">No saved presets</div>`;
             return;
         }
-        this._presetListEl.innerHTML = presets.map(p => `
-            <div class="te-preset-item" data-preset="${p.name.replace(/"/g, '&quot;')}">
-                <span class="te-preset-item-name">${p.name.replace(/</g, '&lt;')}</span>
-                <div class="te-preset-item-btns">
-                    <button class="te-btn te-preset-del" data-preset-del="${p.name.replace(/"/g, '&quot;')}" title="Delete">✕</button>
-                </div>
-            </div>
-        `).join("");
-
-        // Click to load
-        this._presetListEl.querySelectorAll(".te-preset-item").forEach(item => {
-            item.addEventListener("click", (e) => {
-                if (e.target.closest(".te-preset-del")) return;
-                this._loadPreset(item.dataset.preset);
-            });
-        });
-
-        // Delete buttons
-        this._presetListEl.querySelectorAll(".te-preset-del").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                e.stopPropagation();
-                this._deletePreset(btn.dataset.presetDel);
-            });
-        });
+        this._presetListEl.replaceChildren();
+        for (const preset of presets) {
+            const item = document.createElement("div");
+            item.className = "te-preset-item";
+            item.dataset.preset = preset.name;
+            const load = document.createElement("button");
+            load.className = "te-preset-item-name";
+            load.textContent = preset.name;
+            load.title = `Load ${preset.name}`;
+            load.addEventListener("click", () => this._loadPreset(preset.name));
+            const remove = document.createElement("button");
+            remove.className = "te-btn te-preset-del";
+            remove.textContent = "✕";
+            remove.title = `Delete ${preset.name}`;
+            remove.setAttribute("aria-label", remove.title);
+            remove.addEventListener("click", () => this._deletePreset(preset.name));
+            item.append(load, remove);
+            this._presetListEl.appendChild(item);
+        }
     }
 
     // ── Drag ──
@@ -2010,7 +2095,7 @@ class ThemeEditor {
         let dragging = false, startX, startY, origX, origY;
 
         header.addEventListener("pointerdown", (e) => {
-            if (e.target.closest(".te-btn")) return;
+            if (e.target.closest("button, input")) return;
             dragging = true;
             startX = e.clientX; startY = e.clientY;
             const rect = panel.getBoundingClientRect();
@@ -2031,6 +2116,7 @@ class ThemeEditor {
             if (!dragging) return;
             dragging = false;
             header.releasePointerCapture(e.pointerId);
+            this._clampPosition();
             const rect = panel.getBoundingClientRect();
             this._savePosition(rect.left, rect.top);
         });
@@ -2041,6 +2127,13 @@ const themeEditor = new ThemeEditor();
 
 // Offscreen canvas for measuring text width
 const _measureCtx = document.createElement("canvas").getContext("2d");
+const NODE_LAYOUT_GRID = 10;
+const NODE_FONT_FAMILY = "Inter, Arial, sans-serif";
+let nodeFontRevision = 0;
+document.fonts?.addEventListener("loadingdone", () => {
+    nodeFontRevision++;
+    comfyApp.canvas?.setDirty(true, true);
+});
 
 function getCollapsedTitleWidth(node) {
     const title = (node.getTitle ? node.getTitle() : node.title) || "";
@@ -2053,17 +2146,23 @@ function getCollapsedTitleWidth(node) {
 }
 
 function enforceTitleMinWidth(node) {
-    const fontSize = LiteGraph.NODE_TEXT_SIZE || 14;
-    const titleH = LiteGraph.NODE_TITLE_HEIGHT || 30;
-
+    let measureKey = null;
+    let minWidth = 0;
     function getMinW() {
         const title = (node.getTitle ? node.getTitle() : node.title) || "";
-        _measureCtx.font = `${fontSize}px Inter, Arial, sans-serif`;
-        return _measureCtx.measureText(title).width + titleH * 2 + 4;
+        const fontSize = LiteGraph.NODE_TEXT_SIZE || 14;
+        const titleH = LiteGraph.NODE_TITLE_HEIGHT || 30;
+        const key = JSON.stringify([title, fontSize, titleH, nodeFontRevision, document.fonts?.status]);
+        if (key !== measureKey) {
+            measureKey = key;
+            _measureCtx.font = `${fontSize}px ${NODE_FONT_FAMILY}`;
+            minWidth = _measureCtx.measureText(title).width + titleH * 2 + 4;
+        }
+        return minWidth;
     }
 
     // Intercept _size (used by renderingSize getter) to clamp width & snap to grid
-    const GRID = 10;
+    const GRID = NODE_LAYOUT_GRID;
     function snap(w) { return Math.ceil(w / GRID) * GRID; }
 
     let _sizeVal = node._size;
@@ -2092,12 +2191,28 @@ function enforceTitleMinWidth(node) {
 }
 
 function lockCollapsedWidth(node) {
-    const GRID = 10;
+    const GRID = NODE_LAYOUT_GRID;
     function snap(w) { return Math.ceil(w / GRID) * GRID; }
-    const titleW = getCollapsedTitleWidth(node);
     let stored = node._collapsed_width || 0;
+    let measuredTitle = null;
+    let measuredFontSize = null;
+    let measuredFontRevision = null;
+    let measuredFontStatus = null;
+    let titleW = 0;
     Object.defineProperty(node, '_collapsed_width', {
-        get() { return snap(Math.max(stored, titleW)); },
+        get() {
+            const title = (node.getTitle ? node.getTitle() : node.title) || "";
+            const fontSize = LiteGraph.NODE_TEXT_SIZE || 14;
+            if (title !== measuredTitle || fontSize !== measuredFontSize
+                || nodeFontRevision !== measuredFontRevision || document.fonts?.status !== measuredFontStatus) {
+                measuredTitle = title;
+                measuredFontSize = fontSize;
+                measuredFontRevision = nodeFontRevision;
+                measuredFontStatus = document.fonts?.status;
+                titleW = getCollapsedTitleWidth(node);
+            }
+            return snap(Math.max(stored, titleW));
+        },
         set(v) { stored = v; },
         configurable: true
     });
@@ -2156,6 +2271,10 @@ function installGroupOverride() {
             const rawColor = group.color || '#335';
             const palette = LINEAR_GROUP_COLORS[rawColor] || { bg: rawColor, accent: rawColor };
             const accentRgb = _hexToRgb(palette.accent);
+            // Explicit group colors win. The editor controls only the default tint.
+            const fillRgb = rawColor === '#335'
+                ? _hexToRgb(themeEditor.config.canvas.groupColor)
+                : accentRgb;
 
             const x = pos[0], y = pos[1], w = size[0], h = size[1];
             const r = 8;
@@ -2165,7 +2284,7 @@ function installGroupOverride() {
             // "group color not working") without leaving the minimal look.
             ctx.beginPath();
             ctx.roundRect(x, y, w, h, r);
-            ctx.fillStyle = `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, ${GROUP_FILL_ALPHA})`;
+            ctx.fillStyle = `rgba(${fillRgb.r}, ${fillRgb.g}, ${fillRgb.b}, ${GROUP_FILL_ALPHA})`;
             ctx.fill();
             ctx.strokeStyle = `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, ${GROUP_BORDER_ALPHA})`;
             ctx.lineWidth = 1;
@@ -2197,14 +2316,79 @@ function installGroupOverride() {
 const LINEAR_THEME_EXTENSION = {
     name: "Comfy.LinearTheme",
     nodeCreated(node) {
-        stripNodeColor(node);
         enforceTitleMinWidth(node);
         lockCollapsedWidth(node);
     },
     loadedGraphNode(node) {
-        stripNodeColor(node);
         enforceTitleMinWidth(node);
         lockCollapsedWidth(node);
+    },
+    getCanvasMenuItems(canvas) {
+        const selectedNodes = canvas.selectedItems
+            ? [...canvas.selectedItems].filter(item => typeof item.collapse === "function")
+            : Object.values(canvas.selected_nodes || {});
+        const hasSelection = selectedNodes.length > 0;
+
+        return [null, {
+            content: "Linear Theme",
+            has_submenu: true,
+            submenu: {
+                options: [
+                    {
+                        content: "Compact Selected Nodes",
+                        disabled: !hasSelection,
+                        callback: () => {
+                            for (const node of selectedNodes) {
+                                if (!node.flags.collapsed) {
+                                    const minSize = node.computeSize();
+                                    node.setSize(minSize);
+                                }
+                            }
+                            comfyApp.canvas.setDirty(true, true);
+                        }
+                    },
+                    {
+                        content: "Collapse Selected Nodes",
+                        disabled: !hasSelection,
+                        callback: () => {
+                            for (const node of selectedNodes) {
+                                if (!node.flags.collapsed) {
+                                    node.collapse();
+                                }
+                            }
+                            comfyApp.canvas.setDirty(true, true);
+                        }
+                    },
+                    {
+                        content: "Arrange Selected Nodes",
+                        disabled: !hasSelection,
+                        callback: () => {
+                            arrangeSelectedNodes(selectedNodes);
+                        }
+                    },
+                    null, // separator
+                    {
+                        content: "Expand Selected Nodes",
+                        disabled: !hasSelection,
+                        callback: () => {
+                            for (const node of selectedNodes) {
+                                if (node.flags.collapsed) {
+                                    node.collapse(); // toggles back
+                                }
+                            }
+                            comfyApp.canvas.setDirty(true, true);
+                        }
+                    },
+                    null, // separator
+                    {
+                        content: "Theme Editor",
+                        callback: () => {
+                            themeEditor.toggle();
+                        }
+                    },
+                ],
+            },
+        }];
     },
     async setup() {
         // Re-inject CSS so our <style> is last in <head> (wins specificity ties
@@ -2231,41 +2415,40 @@ const LINEAR_THEME_EXTENSION = {
                FPS Boost — Runtime rendering optimizations
                ═══════════════════════════════════════════════════════ */
 
-            // 1. Throttle redraws when idle (no mouse/keyboard activity)
-            //    LiteGraph redraws at full framerate even when nothing changes.
-            //    We cap idle redraws to ~15fps and restore full speed on interaction.
+            // 1. Use the current LiteGraph frame limiter, respecting FPS Boost.
             {
                 let idleTimer = null;
                 let isIdle = false;
-                const IDLE_DELAY = 800; // ms before entering idle mode
-                const IDLE_FPS = 15;
-                const normalMaxFps = canvas.ds?.max_fps || 0;
-
+                const normalGap = canvas._maximumFrameGap || 0;
+                const normalMaxFps = normalGap > 0 ? 1000 / normalGap : 0;
+                const supportsLimiter = "maximumFps" in canvas;
+                const updateLimit = () => {
+                    if (!supportsLimiter) return;
+                    const idle = isIdle && themeEditor.config.canvas.fpsBoost
+                        && executionState.runningNodeId == null;
+                    canvas.maximumFps = idle ? (normalMaxFps ? Math.min(15, normalMaxFps) : 15) : normalMaxFps;
+                };
                 const wakeUp = () => {
-                    if (isIdle) {
-                        isIdle = false;
-                        if (canvas.ds) canvas.ds.max_fps = normalMaxFps;
-                        canvas.setDirty(true, true);
-                    }
+                    isIdle = false;
+                    updateLimit();
                     clearTimeout(idleTimer);
                     idleTimer = setTimeout(() => {
                         isIdle = true;
-                        if (canvas.ds) canvas.ds.max_fps = IDLE_FPS;
-                    }, IDLE_DELAY);
+                        updateLimit();
+                    }, 800);
                 };
-
-                const canvasEl = canvas.canvas || document.querySelector("canvas");
+                themeEditor._updateIdleRendering = updateLimit;
+                const canvasEl = canvas.canvas;
                 if (canvasEl) {
-                    canvasEl.addEventListener("mousemove", wakeUp, { passive: true });
-                    canvasEl.addEventListener("mousedown", wakeUp, { passive: true });
-                    canvasEl.addEventListener("wheel", wakeUp, { passive: true });
+                    for (const event of ["pointermove", "pointerdown", "pointerup", "wheel"]) {
+                        canvasEl.addEventListener(event, wakeUp, { passive: true });
+                    }
                     document.addEventListener("keydown", wakeUp, { passive: true });
                 }
-                // Start in idle
-                idleTimer = setTimeout(() => {
-                    isIdle = true;
-                    if (canvas.ds) canvas.ds.max_fps = IDLE_FPS;
-                }, IDLE_DELAY);
+                for (const event of ["execution_start", "executing", "execution_error", "execution_success"]) {
+                    api?.addEventListener(event, wakeUp);
+                }
+                wakeUp();
             }
 
             // 2. Skip widget text rendering when zoomed out far
@@ -2274,8 +2457,8 @@ const LINEAR_THEME_EXTENSION = {
                 const origDrawNodeWidgets = LGraphCanvas.prototype.drawNodeWidgets;
                 if (origDrawNodeWidgets) {
                     LGraphCanvas.prototype.drawNodeWidgets = function(node, posY, ctx, active_widget) {
-                        if (this.ds && this.ds.scale < 0.4) return; // skip widgets at low zoom
-                        return origDrawNodeWidgets.call(this, node, posY, ctx, active_widget);
+                        if (themeEditor.config.canvas.fpsBoost && this.ds && this.ds.scale < 0.4) return;
+                        return origDrawNodeWidgets.apply(this, arguments);
                     };
                 }
             }
@@ -2289,9 +2472,11 @@ const LINEAR_THEME_EXTENSION = {
                         if (this.dragging_canvas) {
                             const prevBorder = this.render_connections_border;
                             this.render_connections_border = false;
-                            const result = origDrawConnections.call(this, ctx);
-                            this.render_connections_border = prevBorder;
-                            return result;
+                            try {
+                                return origDrawConnections.call(this, ctx);
+                            } finally {
+                                this.render_connections_border = prevBorder;
+                            }
                         }
                         const result = origDrawConnections.call(this, ctx);
 
@@ -2375,7 +2560,7 @@ const LINEAR_THEME_EXTENSION = {
                 if (origDrawNodeShape) {
                     LGraphCanvas.prototype.drawNodeShape = function(node, ctx, size, fgcolor, bgcolor, selected, mouse_over) {
                         // At very low zoom, skip text-heavy rendering
-                        if (this.ds && this.ds.scale < 0.3 && !selected) {
+                        if (themeEditor.config.canvas.fpsBoost && this.ds && this.ds.scale < 0.3 && !selected) {
                             // Just draw a simple rectangle
                             ctx.fillStyle = bgcolor || "#1a1a1a";
                             const r = 8 * this.ds.scale;
@@ -2462,12 +2647,15 @@ const LINEAR_THEME_EXTENSION = {
                 const savedOutputs = node.outputs;
                 node._realInputs = savedInputs;
                 node._realOutputs = savedOutputs;
-                node.inputs = [];
-                node.outputs = [];
-                const result = origDrawNode.call(this, node, ctx);
-                node.inputs = savedInputs;
-                node.outputs = savedOutputs;
-                return result;
+                // Slot setters mutate their backing arrays in recent LiteGraph versions.
+                // Hide only the renderer's slot dots; never alter node data.
+                const savedRenderCollapsedSlots = this.render_collapsed_slots;
+                this.render_collapsed_slots = false;
+                try {
+                    return origDrawNode.call(this, node, ctx);
+                } finally {
+                    this.render_collapsed_slots = savedRenderCollapsedSlots;
+                }
             }
             return origDrawNode.call(this, node, ctx);
         };
@@ -2532,78 +2720,6 @@ const LINEAR_THEME_EXTENSION = {
             };
         }
 
-        // --- Context menu: Linear Theme submenu (compact / collapse) ---
-        const origGetCanvasMenuOptions = LGraphCanvas.prototype.getCanvasMenuOptions;
-        LGraphCanvas.prototype.getCanvasMenuOptions = function (...args) {
-            const options = origGetCanvasMenuOptions.apply(this, args);
-            const selectedNodes = Object.values(this.selected_nodes || {});
-            const hasSelection = selectedNodes.length > 0;
-
-            options.push(null); // separator
-            options.push({
-                content: "Linear Theme",
-                has_submenu: true,
-                submenu: {
-                    options: [
-                        {
-                            content: "Compact Selected Nodes",
-                            disabled: !hasSelection,
-                            callback: () => {
-                                for (const node of selectedNodes) {
-                                    if (!node.flags.collapsed) {
-                                        const minSize = node.computeSize();
-                                        node.setSize(minSize);
-                                    }
-                                }
-                                comfyApp.canvas.setDirty(true, true);
-                            }
-                        },
-                        {
-                            content: "Collapse Selected Nodes",
-                            disabled: !hasSelection,
-                            callback: () => {
-                                for (const node of selectedNodes) {
-                                    if (!node.flags.collapsed) {
-                                        node.collapse();
-                                    }
-                                }
-                                comfyApp.canvas.setDirty(true, true);
-                            }
-                        },
-                        {
-                            content: "Arrange Selected Nodes",
-                            disabled: !hasSelection,
-                            callback: () => {
-                                arrangeSelectedNodes(selectedNodes);
-                            }
-                        },
-                        null, // separator
-                        {
-                            content: "Expand Selected Nodes",
-                            disabled: !hasSelection,
-                            callback: () => {
-                                for (const node of selectedNodes) {
-                                    if (node.flags.collapsed) {
-                                        node.collapse(); // toggles back
-                                    }
-                                }
-                                comfyApp.canvas.setDirty(true, true);
-                            }
-                        },
-                        null, // separator
-                        {
-                            content: "Theme Editor",
-                            callback: () => {
-                                themeEditor.toggle();
-                            }
-                        },
-                    ],
-                },
-            });
-
-            return options;
-        };
-
         // --- Execution glow: API listeners ---
         if (api) {
             api.addEventListener("execution_start", () => {
@@ -2645,95 +2761,61 @@ const LINEAR_THEME_EXTENSION = {
         // --- Theme Editor: initialize & apply saved config ---
         await themeEditor.init();
 
-        // --- Fix: clamp floating actionbar within viewport + force visibility ---
+        // --- Floating actionbar: idempotent styles, one scheduled pass per frame ---
         {
+            let pendingFrame = null;
+            const setStyle = (element, property, value) => {
+                if (element.style.getPropertyValue(property) !== value
+                    || element.style.getPropertyPriority(property) !== "important") {
+                    element.style.setProperty(property, value, "important");
+                }
+            };
             const fixActionbar = () => {
-                const ab = document.querySelector('.actionbar');
+                const ab = document.querySelector(".actionbar");
                 if (!ab) return;
-                // Force solid background always (Tailwind bg-transparent override)
-                ab.style.setProperty('background', '#131313', 'important');
-                ab.style.setProperty('border', 'none', 'important');
-                ab.style.setProperty('border-radius', '10px', 'important');
-                const pc = ab.querySelector('.p-panel-content');
-                if (pc) {
-                    pc.style.setProperty('background', '#131313', 'important');
-                    pc.style.setProperty('border', 'none', 'important');
-                    pc.style.setProperty('border-radius', '10px', 'important');
+                for (const element of [ab, ab.querySelector(".p-panel-content"), document.querySelector(".actionbar-container")]) {
+                    if (!element) continue;
+                    setStyle(element, "background-color", "rgb(19, 19, 19)");
+                    setStyle(element, "border", "none");
+                    setStyle(element, "border-radius", "10px");
                 }
-                // Force all top bar buttons to have no inline background
-                const container = document.querySelector('.actionbar-container');
-                if (container) {
-                    container.style.setProperty('background', '#131313', 'important');
-                    container.style.setProperty('border', 'none', 'important');
-                    container.querySelectorAll('button, .comfyui-button').forEach(btn => {
-                        const inlineBg = btn.style.backgroundColor || btn.style.background;
-                        if (inlineBg && inlineBg !== 'transparent' && inlineBg !== '#131313') {
-                            btn.style.setProperty('background', 'transparent', 'important');
-                            btn.style.setProperty('border', 'none', 'important');
-                        }
-                    });
-                }
-                // Clamp position if floating — use getBoundingClientRect for accurate position
-                const pos = getComputedStyle(ab).position;
-                if (pos === 'fixed' || pos === 'absolute') {
+                const position = getComputedStyle(ab).position;
+                if (position === "fixed" || position === "absolute") {
                     const rect = ab.getBoundingClientRect();
                     const vw = document.documentElement.clientWidth;
                     const vh = document.documentElement.clientHeight;
                     if (rect.right > vw || rect.left < 0 || rect.bottom > vh || rect.top < 0) {
-                        // Off-screen — bring it back to center top
-                        const newLeft = Math.max(10, (vw - rect.width) / 2);
-                        const scale = (parseFloat(ab.style.left) || 0) / (rect.left || 1);
-                        ab.style.left = (newLeft * (scale || 1)) + 'px';
-                        ab.style.top = '60px';
+                        const left = Math.max(8, Math.min(rect.left, vw - rect.width - 8));
+                        const top = Math.max(8, Math.min(rect.top, vh - rect.height - 8));
+                        const parentRect = position === "absolute" ? ab.offsetParent?.getBoundingClientRect() : null;
+                        ab.style.left = `${left - (parentRect?.left || 0)}px`;
+                        ab.style.top = `${top - (parentRect?.top || 0)}px`;
                     }
                 }
             };
-            const ab = document.querySelector('.actionbar');
-            if (ab) {
-                fixActionbar();
-                new MutationObserver(() => requestAnimationFrame(fixActionbar))
-                    .observe(ab, { attributes: true, attributeFilter: ['class', 'style'] });
-            }
-            // Also observe the actionbar-container for button changes
-            const abc = document.querySelector('.actionbar-container');
-            if (abc) {
-                fixActionbar();
-                new MutationObserver(() => requestAnimationFrame(fixActionbar))
-                    .observe(abc, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
-            }
-        }
-
-        // --- Fix: top bar button hover (blue → white) ---
-        {
-            const addHoverFix = () => {
-                const container = document.querySelector('.actionbar-container');
-                if (!container) return;
-                container.querySelectorAll('button, .comfyui-button').forEach(btn => {
-                    if (btn._hoverFixed) return;
-                    btn._hoverFixed = true;
-                    btn.addEventListener('mouseenter', () => {
-                        btn.style.setProperty('background-color', 'rgba(244,244,245,0.08)', 'important');
-                    });
-                    btn.addEventListener('mouseleave', () => {
-                        if (btn.textContent?.trim() === 'Run') {
-                            btn.style.setProperty('background-color', 'rgba(244,244,245,0.15)', 'important');
-                        } else {
-                            btn.style.setProperty('background-color', 'transparent', 'important');
-                        }
-                    });
+            const schedule = () => {
+                if (pendingFrame !== null) return;
+                pendingFrame = requestAnimationFrame(() => {
+                    pendingFrame = null;
+                    fixActionbar();
                 });
             };
-            addHoverFix();
-            // Re-apply periodically instead of MutationObserver on body (much less overhead)
-            setInterval(addHoverFix, 2000);
+            const target = document.querySelector(".actionbar-container") || document.querySelector(".actionbar");
+            if (target) {
+                fixActionbar();
+                new MutationObserver(schedule).observe(target, {
+                    childList: true, subtree: true, attributes: true, attributeFilter: ["class", "style"],
+                });
+                window.addEventListener("resize", schedule);
+            }
         }
 
         // --- Snap Guides: alignment lines when dragging nodes ---
         {
             const titleH = LiteGraph.NODE_TITLE_HEIGHT || 30;
             const origDrawFront = LGraphCanvas.prototype.drawFrontCanvas;
-            LGraphCanvas.prototype.drawFrontCanvas = function() {
-                origDrawFront.call(this);
+            LGraphCanvas.prototype.drawFrontCanvas = function(...args) {
+                origDrawFront.apply(this, args);
 
                 // Check config — default to true if not set
                 if (themeEditor?.config?.canvas?.snapGuides === false) return;
@@ -2774,9 +2856,9 @@ const LINEAR_THEME_EXTENSION = {
                         if (!g) continue;
                         const gx = g.pos[0], gy = g.pos[1], gw = g.size[0], gh = g.size[1];
                         if (Math.abs(dx - gx) < THRESH) guides.push({t:'v', v:gx});
-                        if (Math.abs(dr - gx + gw) < THRESH) guides.push({t:'v', v:gx + gw});
+                        if (Math.abs(dr - (gx + gw)) < THRESH) guides.push({t:'v', v:gx + gw});
                         if (Math.abs(dy - gy) < THRESH) guides.push({t:'h', v:gy});
-                        if (Math.abs(db - gy + gh) < THRESH) guides.push({t:'h', v:gy + gh});
+                        if (Math.abs(db - (gy + gh)) < THRESH) guides.push({t:'h', v:gy + gh});
                     }
                 }
                 if (guides.length === 0) return;
@@ -2844,7 +2926,7 @@ const LINEAR_THEME_EXTENSION = {
             const w = this.size[0];
             const h = this.size[1];
             const titleH = LiteGraph.NODE_TITLE_HEIGHT || 30;
-            const radius = 8;
+            const radius = themeEditor.config.canvas.nodeBorderRadius;
 
             // Skip detailed drawing when zoomed out
             const scale = comfyApp.canvas?.ds?.scale || 1;
@@ -2852,7 +2934,7 @@ const LINEAR_THEME_EXTENSION = {
 
             // Cover the anti-aliasing seam between title and body
             if (!this.flags?.collapsed) {
-                ctx.fillStyle = themeEditor?.config?.nodes?.bodyColor || "#18181b";
+                ctx.fillStyle = this.bgcolor || themeEditor?.config?.nodes?.bodyColor || "#18181b";
                 ctx.fillRect(0, -1, w, 2);
             }
 
@@ -2891,7 +2973,8 @@ const LINEAR_THEME_EXTENSION = {
                     const realInputs = this._realInputs || this.inputs || [];
                     const realOutputs = this._realOutputs || this.outputs || [];
 
-                    const connectedInputs = realInputs.filter(i => i.link != null);
+                    const connectedInputs = realInputs.filter((input, index) =>
+                        this.isInputConnected ? this.isInputConnected(index) : input.link != null);
                     let dotColor;
                     if (isBypassed) {
                         dotColor = "#c090e0";
@@ -2926,8 +3009,8 @@ const LINEAR_THEME_EXTENSION = {
                     ctx.fillText(titleText, textX, centerY);
 
                     // 4. Output: small rounded tick inside pill, right edge
-                    realOutputs.forEach(out => {
-                        if (out.links?.length > 0) {
+                    realOutputs.forEach((out, index) => {
+                        if (this.isOutputConnected ? this.isOutputConnected(index) : out.links?.length > 0) {
                             ctx.fillStyle = byType[out.type] || fallbackColor;
                             ctx.beginPath();
                             ctx.roundRect(collW - 6, centerY - 5, 3, 10, 1.5);

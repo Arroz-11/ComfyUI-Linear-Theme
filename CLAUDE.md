@@ -79,7 +79,7 @@ When the actionbar (Run button area) is undocked/floated, it becomes invisible b
 **Solution:**
 - `actionbar-container` must have `contain: none !important` (DO NOT add `contain` to it)
 - Use JS MutationObserver to force `background: #131313` on the actionbar when Tailwind classes change
-- Use `setInterval` for hover fix on top bar buttons (MutationObserver on `document.body` is too expensive for FPS)
+- Use CSS for button hover; keep actionbar style updates idempotent and schedule at most one pass per frame. Avoid recurring DOM scans and observers on `document.body`.
 
 ### Bug #5: Mask Editor Image Invisible (CRITICAL — GitHub issue #2)
 
@@ -100,6 +100,21 @@ NEVER set `background` on `.maskEditor-ui-container`. Style only `color` there; 
 **Solution:**
 - Groups get a subtle fill of the accent color at 7% alpha (plus the existing border/dot/title).
 - NEVER set `links_render_mode` from the theme — the user's ComfyUI setting stays in control.
+
+### Bug #7: Collapsing Nodes Deletes Slots in Current Frontends
+
+**Problem:** Recent LiteGraph slot setters mutate the existing inputs/outputs arrays with `splice`. Saving a reference, assigning `[]`, and restoring that reference permanently removes slots.
+
+**Solution:** Never assign to `node.inputs` or `node.outputs` while drawing. Temporarily disable `render_collapsed_slots`, restoring it with `try/finally`. Use `isInputConnected` / `isOutputConnected` for indicators when available.
+
+## Current Frontend Compatibility
+
+- Register context-menu actions with `getCanvasMenuItems`, not a replacement of `getCanvasMenuOptions`.
+- Forward all arguments when wrapping `drawFrontCanvas` and `drawNodeWidgets`.
+- Idle throttling uses the canvas frame limiter, not `canvas.ds.max_fps`. The `maximumFps` getter is not inverse to its setter in frontend 1.55.17; restore the original limit from `_maximumFrameGap`.
+- Nodes 2.0 uses CSS tokens for surfaces and slot colors. Scope `--radius-xl` to `.lg-node` to retain native BOX/CARD shapes.
+- Keep title measurement caches invalidated by title, font size, title height and font loading.
+- Preserve workflow colors, config data, and the existing font/mask editor protections.
 
 ## Key CSS Variables for Context Menu (native ComfyUI)
 - `--border-default` → separator lines (we define as `#27272a`)
@@ -127,7 +142,7 @@ These Tailwind classes compile to static values and CANNOT be overridden via CSS
 - Text muted: `#71717a`
 
 ## Known Pending
-- Dedupe the 8 CSS selectors defined twice (`.p-tooltip`, `.side-bar-panel`, `.manager-dialog`, `.p-slider`, `.p-panel`, `.p-badge`, `.litesearchbox`, `.workflow-tab`). Same values today, so harmless — do it with per-rule visual verification.
+- Two identical CSS rules have been deduplicated. Thirteen remaining repeated selector occurrences have different declarations and preserve intentional cascade behavior. Do not merge them without computed-style checks across base, hover, and focus states.
 
 ## Design Direction
 - Premium dark theme — unique identity, not a copy of any specific app
