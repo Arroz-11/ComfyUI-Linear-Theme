@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-linear-theme"
 description = "Premium dark theme for ComfyUI - pure black, zinc scale, FPS-optimized, fully customizable with a live Theme Editor. Inspired by the Freepik Spaces canvas, with touches of Linear, Vercel, and Raycast."
-version = "2.0.6"
+version = "2.0.7"
 license = { file = "LICENSE" }
 
 [project.urls]
